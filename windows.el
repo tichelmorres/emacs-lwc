@@ -1,0 +1,21 @@
+(setq nu/dash-file (lwc/config-path "dash-windows.org"))
+(prefer-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(add-to-list 'default-frame-alist '(font . "Consolas-15"))
+
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (when (string-equal (buffer-file-name) nu/dash-file)
+              (org-mode)
+              (setq-local org-link-elisp-confirm-function nil)
+              (setq-local visual-fill-column-width 40)
+              (visual-line-mode 1)
+              (read-only-mode 0)
+              (visual-fill-column-mode 1)
+              (goto-char (point-min))
+              (forward-line 14)
+              (let ((win (get-buffer-window (current-buffer) t)))
+                (when win (with-selected-window win (recenter (/ (window-body-height) 2))))))))
+
+(rc/require-theme 'gruber-darker)
+(load-theme 'gruber-darker t)

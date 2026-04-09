@@ -1,0 +1,14 @@
+auto-save-list/
+backups/
+eln-cache/
+elpa/
+games/
+images/
+transient/
+url/
+.mc-lists.el
+custom.el
+ido.last
+smex-items
+projects
+tramp
