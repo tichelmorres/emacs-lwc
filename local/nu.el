@@ -316,8 +316,8 @@
       (end-of-line)
     (backward-char)))
 
-(defconst nu/dashboard-nav-start-line 15)
-(defconst nu/dashboard-nav-end-line   19)
+(defconst nu/dashboard-nav-start-line 17)
+(defconst nu/dashboard-nav-end-line   21)
 
 (defvar-local nu/dashboard-nav--items nil)
 

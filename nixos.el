@@ -56,18 +56,14 @@
 
 ;; (setq-default header-line-format " ")
 
-(rc/require 'doom-themes)
-(load-theme 'doom-henna t)
+(defvar mo/menu-background "#181818")
+(when (display-graphic-p)
+  (require 'color)
+  (set-face-attribute 'header-line nil
+                      :background mo/menu-background
+                      :box nil)
 
-;; For Gruber Darker theme
-;; (defvar mo/menu-background "#181818")
-;; (when (display-graphic-p)
-;;   (require 'color)
-;;   (set-face-attribute 'header-line nil
-;;                       :background mo/menu-background
-;;                       :box nil)
+  (set-face-attribute 'menu nil :background mo/menu-background))
 
-;;   (set-face-attribute 'menu nil :background mo/menu-background))
-
-;; (rc/require-theme 'gruber-darker)
-;; (load-theme 'gruber-darker t)
+(rc/require-theme 'gruber-darker)
+(load-theme 'gruber-darker t)

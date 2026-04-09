@@ -8,6 +8,10 @@
 ;; Kill running processes without prompting on exit
 (setq confirm-kill-processes nil)
 
+;; Enable mouse on -nw mode
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1))
+
 ;; Disable auto-saving
 (setq auto-save-default nil)
 
