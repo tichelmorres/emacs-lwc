@@ -4,6 +4,10 @@
     (setq deactivate-mark nil)
     (setq mark-active t)))
 
+(defun nu/backward-delete-word (arg)
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+
 (defun nu/undo ()
   (interactive)
   (deactivate-mark)

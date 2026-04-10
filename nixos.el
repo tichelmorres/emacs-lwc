@@ -21,7 +21,7 @@
 (setq nu/dash-file (lwc/config-path "dash-nixos.org"))
 (prefer-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
-(add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font Mono-19"))
+(add-to-list 'default-frame-alist '(font . "PlemolJP Console NF-18"))
 (set-face-attribute 'default nil :weight 'normal)
 ;; (set-face-attribute 'font-lock-comment-face nil :weight 'bold)
 ;; (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
