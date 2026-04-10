@@ -1,10 +1,9 @@
-;; This probably broke Emacs on Windows
-;(when (eq system-type 'windows-nt)
-;  (setq package-gnupghome-dir
-;        (expand-file-name "elpa/gnupg" user-emacs-directory))
-;  (unless (file-directory-p package-gnupghome-dir)
-;    (make-directory package-gnupghome-dir t))
-;  (setq package-check-signature nil))
+(when (eq system-type 'windows-nt)
+  (setq package-gnupghome-dir
+        (expand-file-name "elpa/gnupg" user-emacs-directory))
+  (unless (file-directory-p package-gnupghome-dir)
+    (make-directory package-gnupghome-dir t))
+  (setq package-check-signature nil))
 
 (package-initialize)
 

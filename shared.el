@@ -69,10 +69,11 @@
           t)
 
 ;; Wayland wl-copy support for emacs -nw
-(rc/require 'xclip)
-(setq xclip-program "wl-copy")
-(setq xclip-method 'wl-copy)
-(xclip-mode 1)
+(unless (eq system-type 'windows-nt)
+  (rc/require 'xclip)
+  (setq xclip-program "wl-copy")
+  (setq xclip-method 'wl-copy)
+  (xclip-mode 1))
 
 ;; Auto-completion
 (rc/require 'smex 'ido-completing-read+)
@@ -169,15 +170,15 @@
           (t                           5))))
 
 (advice-add 'ls-lisp-handle-switches :filter-return
-  (lambda (file-alist)
-    (sort file-alist
-          (lambda (a b)
-            (let ((pa (nu/dired-extension-priority (car a)))
-                  (pb (nu/dired-extension-priority (car b))))
-              (if (= pa pb)
-                  (ls-lisp-string-lessp (car a) (car b))
-                (< pa pb))))))
-  '((name . nu/dired-extension-priority-sort)))
+            (lambda (file-alist)
+              (sort file-alist
+                    (lambda (a b)
+                      (let ((pa (nu/dired-extension-priority (car a)))
+                            (pb (nu/dired-extension-priority (car b))))
+                        (if (= pa pb)
+                            (ls-lisp-string-lessp (car a) (car b))
+                          (< pa pb))))))
+            '((name . nu/dired-extension-priority-sort)))
 
 ;; | --------------------------------------------
 ;; |  Binds
@@ -272,9 +273,9 @@
 
 ;; Ctrl + Backspace should not push word to kill ring
 (global-set-key (kbd "C-<backspace>")
-  (lambda (arg)
-    (interactive "p")
-    (delete-region (point) (progn (backward-word arg) (point)))))
+                (lambda (arg)
+                  (interactive "p")
+                  (delete-region (point) (progn (backward-word arg) (point)))))
 
 ;; Multiple cursors
 (rc/require 'multiple-cursors)
@@ -297,7 +298,7 @@
 
 ;; Don't let the theme set a background color on -nw mode
 (unless (display-graphic-p)
-    (set-face-background 'default "unspecified-bg"))
+  (set-face-background 'default "unspecified-bg"))
 
 ;; | --------------------------------------------
 ;; |  Programming
@@ -336,7 +337,7 @@
 ;; HTML / CSS
 (add-hook 'html-mode-hook (lambda () (visual-line-mode t)))
 (add-hook 'css-mode-hook  (lambda () (visual-line-mode t)))
- 
+
 ;; JSONC
 (add-to-list 'auto-mode-alist '("\\.jsonc\\'" . js-json-mode))
 

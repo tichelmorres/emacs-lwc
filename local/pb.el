@@ -114,7 +114,12 @@ println(\"Hello, world!\")
          (buf    (get-buffer-create name)))
     (when freshp
       (with-current-buffer buf
-        (shell-mode)        (comint-exec buf name (or (getenv "SHELL") "/bin/sh") nil nil)))
+        (shell-mode)        (let ((shell (or (getenv "SHELL")
+                                             (and (eq system-type 'windows-nt)
+                                                  (or (executable-find "bash")
+                                                      (executable-find "cmd")))
+                                             "/bin/sh")))
+                              (comint-exec buf name shell nil nil))))
     (cons buf freshp)))
 
 (defun pb/display (probe-buf shell-buf)

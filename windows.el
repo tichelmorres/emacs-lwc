@@ -10,10 +10,8 @@
               (setq-local org-link-elisp-confirm-function nil)
               (setq-local visual-fill-column-width 40)
               (visual-line-mode 1)
-              (read-only-mode 0)
+              (read-only-mode 1)
               (visual-fill-column-mode 1)
-              (goto-char (point-min))
-              (forward-line 14)
               (let ((win (get-buffer-window (current-buffer) t)))
                 (when win (with-selected-window win (recenter (/ (window-body-height) 2))))))))
 

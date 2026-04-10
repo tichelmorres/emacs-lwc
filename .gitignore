@@ -4,6 +4,7 @@ eln-cache/
 elpa/
 games/
 images/
+org-persist/
 transient/
 url/
 .mc-lists.el
