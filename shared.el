@@ -314,6 +314,8 @@
 (require 'julia-mode)
 (add-to-list 'auto-mode-alist '("\\.j\\(l\\|ulia\\)\\'" . julia-mode))
 
+(define-key julia-mode-map (kbd "TAB") 'julia-latexsub-or-indent)
+
 ;; Nix
 (rc/require 'nix-mode)
 (require 'nix-mode)
