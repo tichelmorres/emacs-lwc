@@ -111,7 +111,6 @@ println(\"Hello, world!\")
                 (shell-quote-argument bin))))))
 
 (defun pb/resolve-shell ()
-  "Return the shell executable pb should use for vterm, with fallbacks."
   (or (and pb/vterm-shell
            (executable-find pb/vterm-shell)
            pb/vterm-shell)
@@ -223,12 +222,10 @@ println(\"Hello, world!\")
           (insert tmpl)))
       (unless (eq major-mode mode)
         (funcall mode))
-      (local-set-key (kbd "C-s")   #'pb/save-probe)
+      (local-set-key (kbd "C-s")     #'pb/save-probe)
       (local-set-key (kbd "C-c p b") #'pb/rerun-probe))
 
     (when freshp
-      (with-current-buffer sh-buf
-        (nu/text-scale-decrease))
       (let ((cmd (pb/run-command lang config)))
         (write-region (with-current-buffer p-buf (buffer-string))
                       nil

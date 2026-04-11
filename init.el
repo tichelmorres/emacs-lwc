@@ -7,14 +7,6 @@
 
 (package-initialize)
 
-;; Ensure Nix-provided packages are not shadowed by ELPA
-(setq load-path (append (seq-filter
-                          (lambda (p) (string-prefix-p "/nix/" p))
-                          load-path)
-                         (seq-remove
-                          (lambda (p) (string-prefix-p "/nix/" p))
-                          load-path)))
-
 (defvar lwc/config-dir
   (cond
    ((eq system-type 'windows-nt) (expand-file-name "~/.emacs.d/"))
