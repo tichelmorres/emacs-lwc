@@ -37,9 +37,13 @@
 ;; Disable top/bottom padding while scrolling
 (setq scroll-margin 0)
 
-;; Buffers should split window view vertically by default
-(setq split-width-threshold nil
-      split-height-threshold 0)
+;; Buffers split window view vertically this way
+;; (setq split-width-threshold nil
+;;       split-height-threshold 0)
+
+;; Buffers split window view horizontally this way
+(setq split-height-threshold nil
+      split-width-threshold  0)
 
 ;; Disable annoying bell sound
 (setq ring-bell-function 'ignore)

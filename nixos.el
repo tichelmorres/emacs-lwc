@@ -82,8 +82,8 @@
         erc-user-full-name erc/full-nickname)
 
   (setq erc-kill-buffer-on-part t
-        erc-auto-query 'bury
-        erc-join-buffer 'window)
+        erc-auto-query  'bury
+        erc-join-buffer 'window-no-newwin)
 
   ;; SASL for automatic login
   (require 'erc-sasl)
@@ -91,9 +91,9 @@
   (erc-update-modules))
 
 (with-eval-after-load 'erc-sasl
-  (setq erc-sasl-user erc/nickname
+  (setq erc-sasl-user      erc/nickname
         erc-sasl-mechanism 'plain
-        erc-sasl-authzid nil))
+        erc-sasl-authzid   nil))
 
 ;; If the password key is not captured, try hardcoding it
 ;; (setq erc-sasl-password "password")
