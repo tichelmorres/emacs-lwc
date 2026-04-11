@@ -288,6 +288,9 @@
       (nu/wrap-nav--dired-goto-index lines
                                      (1- (nu/wrap-nav--dired-current-index lines))))))
 
+(defun nu/wrap-nav--line-blank-p ()
+  (= (line-beginning-position) (line-end-position)))
+
 (defun nu/wrap-next-line ()
   (interactive)
   (if (derived-mode-p 'dired-mode)
@@ -296,6 +299,10 @@
       (if (= (line-number-at-pos) (nu/wrap-nav--last-line-number))
           (goto-char (point-min))
         (forward-line 1))
+      (while (nu/wrap-nav--line-blank-p)
+        (if (= (line-number-at-pos) (nu/wrap-nav--last-line-number))
+            (goto-char (point-min))
+          (forward-line 1)))
       (move-to-column col))))
 
 (defun nu/wrap-previous-line ()
@@ -306,6 +313,10 @@
       (if (= (line-number-at-pos) 1)
           (goto-char (point-max))
         (forward-line -1))
+      (while (nu/wrap-nav--line-blank-p)
+        (if (= (line-number-at-pos) 1)
+            (goto-char (point-max))
+          (forward-line -1)))
       (move-to-column col))))
 
 (defun nu/wrap-forward-char ()
@@ -462,14 +473,6 @@
 (defun nu/open-games-buffer ()
   (interactive)
   (let ((games-list '(
-                      ;"5x5"
-                      ;"blackbox"
-                      ;"bubbles"
-                      ;"dunnet"
-                      ;"gomoku"
-                      ;"hanoi"
-                      ;"life"
-                      ;"pong"
                       "snake"
                       "solitaire"
                       "tetris"

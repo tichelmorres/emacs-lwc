@@ -1,6 +1,8 @@
 ;;; -*- lexical-binding: t; -*-
 
-(require 'shell)
+(require 'vterm)
+
+(defvar pb/vterm-shell nil)
 
 (defvar pb/language-config
   '((c
@@ -108,18 +110,29 @@ println(\"Hello, world!\")
                 (shell-quote-argument src)
                 (shell-quote-argument bin))))))
 
+(defun pb/resolve-shell ()
+  "Return the shell executable pb should use for vterm, with fallbacks."
+  (or (and pb/vterm-shell
+           (executable-find pb/vterm-shell)
+           pb/vterm-shell)
+      (and (getenv "SHELL")
+           (executable-find (getenv "SHELL"))
+           (getenv "SHELL"))
+      (and (eq system-type 'windows-nt)
+           (or (executable-find "powershell")
+               (executable-find "bash")
+               (executable-find "cmd")))
+      (executable-find "bash")
+      "/bin/sh"))
+
 (defun pb/ensure-shell (lang)
   (let* ((name   (pb/shell-name lang))
-         (freshp (not (comint-check-proc name)))
-         (buf    (get-buffer-create name)))
+         (buf    (get-buffer-create name))
+         (freshp (not (get-buffer-process buf))))
     (when freshp
       (with-current-buffer buf
-        (shell-mode)        (let ((shell (or (getenv "SHELL")
-                                             (and (eq system-type 'windows-nt)
-                                                  (or (executable-find "bash")
-                                                      (executable-find "cmd")))
-                                             "/bin/sh")))
-                              (comint-exec buf name shell nil nil))))
+        (let ((vterm-shell (pb/resolve-shell)))
+          (vterm-mode))))
     (cons buf freshp)))
 
 (defun pb/display (probe-buf shell-buf)
@@ -160,7 +173,8 @@ println(\"Hello, world!\")
          (shell  (pb/ensure-shell lang))
          (sh-buf (car shell)))
     (write-region (buffer-string) nil (pb/src-file lang config))
-    (comint-send-string sh-buf (concat (pb/run-command lang config) "\n"))
+    (with-current-buffer sh-buf
+      (vterm-send-string (concat (pb/run-command lang config) "\n")))
     (message "pb: running %s..." (pb/probe-name lang))))
 
 (defun pb/open-langs-buffer ()
@@ -184,7 +198,7 @@ println(\"Hello, world!\")
                 (puthash label
                          (lambda ()
                            (interactive)
-                           (pb/open-probe lang-capture))
+                           (pb/open-probe lang-capture t))
                          pb/lang-openers)
                 (insert label "\n"))))))
       (read-only-mode 1)
@@ -192,7 +206,7 @@ println(\"Hello, world!\")
       (goto-char (point-min)))
     (switch-to-buffer buf)))
 
-(defun pb/open-probe (lang)
+(defun pb/open-probe (lang &optional restore)
   (let* ((config  (alist-get lang pb/language-config))
          (_       (unless config (user-error "pb: unknown language '%s'" lang)))
          (mode    (plist-get config :mode))
@@ -204,7 +218,7 @@ println(\"Hello, world!\")
 
     (with-current-buffer p-buf
       (when (zerop (buffer-size))
-        (if (pb/session-exists-p lang)
+        (if (and restore (pb/session-exists-p lang))
             (insert-file-contents (pb/src-file lang config))
           (insert tmpl)))
       (unless (eq major-mode mode)
@@ -213,13 +227,14 @@ println(\"Hello, world!\")
       (local-set-key (kbd "C-c p b") #'pb/rerun-probe))
 
     (when freshp
+      (with-current-buffer sh-buf
+        (nu/text-scale-decrease))
       (let ((cmd (pb/run-command lang config)))
         (write-region (with-current-buffer p-buf (buffer-string))
                       nil
                       (pb/src-file lang config))
         (with-current-buffer sh-buf
-          (comint-add-to-input-history cmd))
-        (comint-send-string sh-buf (concat cmd "\n"))))
+          (vterm-send-string (concat cmd "\n")))))
 
     (pb/display p-buf sh-buf)
     (message "pb: opened %s" (pb/probe-name lang))))

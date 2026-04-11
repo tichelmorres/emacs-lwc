@@ -272,19 +272,12 @@
 (global-set-key (kbd "C-c p c") #'pb/open-langs-buffer)
 
 ;; Ctrl + Backspace should not push word to kill ring
-<<<<<<< HEAD
 (global-set-key (kbd "C-<backspace>") #'nu/backward-delete-word)
 
 ;; -nw mode may often cause C-<backspace> to be interpreted
 ;; as C-h for some reason...
 (unless (display-graphic-p)
     (global-set-key (kbd "C-h") #'nu/backward-delete-word))
-=======
-(global-set-key (kbd "C-<backspace>")
-                (lambda (arg)
-                  (interactive "p")
-                  (delete-region (point) (progn (backward-word arg) (point)))))
->>>>>>> 3fdcb3c6e65ddeeeafee45507f973c26477decf5
 
 ;; Multiple cursors
 (rc/require 'multiple-cursors)

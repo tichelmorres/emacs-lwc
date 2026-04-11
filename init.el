@@ -7,6 +7,14 @@
 
 (package-initialize)
 
+;; Ensure Nix-provided packages are not shadowed by ELPA
+(setq load-path (append (seq-filter
+                          (lambda (p) (string-prefix-p "/nix/" p))
+                          load-path)
+                         (seq-remove
+                          (lambda (p) (string-prefix-p "/nix/" p))
+                          load-path)))
+
 (defvar lwc/config-dir
   (cond
    ((eq system-type 'windows-nt) (expand-file-name "~/.emacs.d/"))
@@ -24,6 +32,9 @@
 (load-file (lwc/config-path "local" "nu.el"))
 (load-file (lwc/config-path "local" "la.el"))
 (load-file (lwc/config-path "local" "pb.el"))
+
+;; https://github.com/rexim/simpc-mode
+(load-file (lwc/config-path "local" "simpc-mode.el"))
 
 (cond
  ((eq system-type 'windows-nt) (load-file (lwc/config-path "windows.el")))

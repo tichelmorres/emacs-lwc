@@ -52,7 +52,8 @@
     (setq explicit-shell-file-name fish)
     (setq shell-file-name "/bin/sh")
     (setenv "SHELL" fish)
-    (add-to-list 'exec-path (file-name-directory fish))))
+    (add-to-list 'exec-path (file-name-directory fish))
+    (setq pb/vterm-shell fish)))
 
 ;; (setq-default header-line-format " ")
 
