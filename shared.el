@@ -216,19 +216,25 @@
 ;; C-- => smaller window
 (global-set-key (kbd "C-+")  #'nu/text-scale-increase)
 (global-set-key (kbd "C-=")  #'nu/text-scale-increase)
-(global-set-key (kbd "C-x C-+") #'nu/text-scale-increase)
-(global-set-key (kbd "C-x C-=") #'nu/text-scale-increase)
-
 (global-set-key (kbd "C--")  #'nu/text-scale-decrease)
 (global-set-key (kbd "C-_")  #'nu/text-scale-decrease)
-(global-set-key (kbd "C-x C--") #'nu/text-scale-decrease)
-(global-set-key (kbd "C-x C-_") #'nu/text-scale-decrease)
+
+;; Unset now unuseful binds
+(global-unset-key (kbd "C-x C-+"))
+(global-unset-key (kbd "C-x C-="))
+(global-unset-key (kbd "C-x C--"))
+(global-unset-key (kbd "C-x C-_"))
 
 ;; C-p => select current line, cursor at end of line
 (global-set-key (kbd "C-p") #'nu/select-line)
 
 ;; Toggle line numbers
 (global-set-key (kbd "C-/") #'display-line-numbers-mode)
+
+;; -nw mode causes C-/ to be sent as C-_
+;; so we overwrite the C-_ bind
+(unless (display-graphic-p)
+    (global-set-key (kbd "C-_") #'display-line-numbers-mode))
 
 ;; Ctrl + f for search and Ctrl + s for writing
 ;; Also remove Ctrl + b
@@ -274,8 +280,7 @@
 ;; Ctrl + Backspace should not push word to kill ring
 (global-set-key (kbd "C-<backspace>") #'nu/backward-delete-word)
 
-;; -nw mode may often cause C-<backspace> to be interpreted
-;; as C-h for some reason...
+;; -nw mode causes C-<backspace> to be sent as C-h
 (unless (display-graphic-p)
     (global-set-key (kbd "C-h") #'nu/backward-delete-word))
 
@@ -291,7 +296,7 @@
 
 ;; M-d => add cursor at next match occurrence of selection
 ;; M-l => select all occurrences of current selection
-(global-set-key (kbd "M-d")   #'nu/select-word-or-next)
+(global-set-key (kbd "M-d") #'nu/select-word-or-next)
 (global-set-key (kbd "M-l") #'nu/select-all-occurrences)
 
 ;; | --------------------------------------------

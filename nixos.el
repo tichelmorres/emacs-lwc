@@ -1,3 +1,7 @@
+;; | --------------------------------------------
+;; |  Man entries with completion
+;; | --------------------------------------------
+
 (let* ((raw    (ignore-errors (string-trim (shell-command-to-string "manpath 2>/dev/null"))))
        (paths  (if (and raw (not (string-empty-p raw)))
                    raw
@@ -18,6 +22,10 @@
                 (error (message "man completion: %s" err) nil))))
       (funcall orig string pred action))))
 
+;; | --------------------------------------------
+;; |  Dashboard
+;; | --------------------------------------------
+
 (setq nu/dash-file (lwc/config-path "dash-nixos.org"))
 (prefer-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
@@ -32,7 +40,7 @@
             (when (string-equal (buffer-file-name) nu/dash-file)
               (org-mode)
               (setq-local org-link-elisp-confirm-function nil)
-              (setq-local visual-fill-column-width 40)
+              (setq-local visual-fill-column-width 34)
               (visual-line-mode 1)
               (read-only-mode 1)
               (visual-fill-column-mode 1)
@@ -41,6 +49,10 @@
               (nu/dashboard-nav--goto-item 0 0)
               (let ((win (get-buffer-window (current-buffer) t)))
                 (when win (with-selected-window win (recenter (/ (window-body-height) 2))))))))
+
+;; | --------------------------------------------
+;; |  Shell
+;; | --------------------------------------------
 
 ;; Prefer fish for interactive shells,
 ;; but keep POSIX sh for non-interactive commands
@@ -54,6 +66,50 @@
     (setenv "SHELL" fish)
     (add-to-list 'exec-path (file-name-directory fish))
     (setq pb/vterm-shell fish)))
+
+;; | --------------------------------------------
+;; |  IRC client
+;; | --------------------------------------------
+
+;; ~/.authinfo
+;; machine irc.libera.chat login NICKNAME password NICKSERV_PASSWORD port 6697
+;; chmod 600 ~/.authinfo
+
+(defvar erc/nickname      "ochitsu")
+(defvar erc/full-nickname "Ochitsukanai")
+(with-eval-after-load 'erc
+  (setq erc-nick           erc/nickname
+        erc-user-full-name erc/full-nickname)
+
+  (setq erc-kill-buffer-on-part t
+        erc-auto-query 'bury
+        erc-join-buffer 'window)
+
+  ;; SASL for automatic login
+  (require 'erc-sasl)
+  (add-to-list 'erc-modules 'sasl)
+  (erc-update-modules))
+
+(with-eval-after-load 'erc-sasl
+  (setq erc-sasl-user erc/nickname
+        erc-sasl-mechanism 'plain
+        erc-sasl-authzid nil))
+
+;; If the password key is not captured, try hardcoding it
+;; (setq erc-sasl-password "password")
+
+(defun erc-libera ()
+  (interactive)
+  (erc-tls :server "irc.libera.chat"
+           :port   6697
+           :nick   erc/nickname))
+
+;; Connect to libera.chat using ERC client
+(global-set-key (kbd "C-c i") #'erc-libera)
+
+;; | --------------------------------------------
+;; |  Theming
+;; | --------------------------------------------
 
 ;; (setq-default header-line-format " ")
 

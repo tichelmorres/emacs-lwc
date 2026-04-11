@@ -25,7 +25,6 @@
 (load-file (lwc/config-path "local" "la.el"))
 (load-file (lwc/config-path "local" "pb.el"))
 
-;; https://github.com/rexim/simpc-mode
 (load-file (lwc/config-path "local" "simpc-mode.el"))
 
 (cond

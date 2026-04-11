@@ -10,7 +10,7 @@
             (when (string-equal (buffer-file-name) nu/dash-file)
               (org-mode)
               (setq-local org-link-elisp-confirm-function nil)
-              (setq-local visual-fill-column-width 40)
+              (setq-local visual-fill-column-width 34)
               (visual-line-mode 1)
               (read-only-mode 0)
               (visual-fill-column-mode 1)
