@@ -1,8 +1,14 @@
 (setq nu/dash-file (lwc/config-path "dash-windows.org"))
 
 (setq pb/vterm-shell "powershell")
-(prefer-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
+
+(prefer-coding-system        'utf-8)
+(set-language-environment    "UTF-8")
+(set-default-coding-systems  'utf-8)
+(set-terminal-coding-system  'utf-8)
+(set-keyboard-coding-system  'utf-8)
+(set-selection-coding-system 'utf-16le-dos)
+
 (add-to-list 'default-frame-alist '(font . "Consolas-15"))
 
 (add-hook 'emacs-startup-hook
