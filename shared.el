@@ -127,7 +127,7 @@
 ;; One-line scrolling when pointer hits window edge
 (setq scroll-conservatively 101
       scroll-step 1
-      scroll-preserve-screen-position t
+      scroll-preserve-screen-position nil
       scroll-margin 0)
 
 ;; Disable splash screen and welcome message
@@ -302,6 +302,10 @@
 ;; M-l => select all occurrences of current selection
 (global-set-key (kbd "M-d") #'nu/select-word-or-next)
 (global-set-key (kbd "M-l") #'nu/select-all-occurrences)
+
+;; Scroll keys to snap cursor to column 0 when pushed off-screen
+(global-set-key (kbd "<wheel-down>") #'nu/mwheel-snap)
+(global-set-key (kbd "<wheel-up>")   #'nu/mwheel-snap)
 
 ;; | --------------------------------------------
 ;; |  Theming

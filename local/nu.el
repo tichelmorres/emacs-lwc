@@ -577,3 +577,12 @@
                      (name (file-name-sans-extension base)))
                 (push (format "%s(%s)" name sec) pages)))))))
     (delete-dups pages)))
+
+(defun nu/mwheel-snap (event)
+  (interactive "e")
+  (let ((saved (point)))
+    (condition-case nil
+        (mwheel-scroll event)
+      (error nil))
+    (when (/= (point) saved)
+      (move-beginning-of-line 1))))
