@@ -1,7 +1,5 @@
 (setq nu/dash-file (lwc/config-path "dash-windows.org"))
 
-(setq pb/vterm-shell "powershell")
-
 (prefer-coding-system        'utf-8)
 (set-language-environment    "UTF-8")
 (set-default-coding-systems  'utf-8)

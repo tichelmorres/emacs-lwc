@@ -1,6 +1,8 @@
 ;;; -*- lexical-binding: t; -*-
 
-(require 'vterm)
+(defvar pb/use-vterm
+  (and (not (eq system-type 'windows-nt))
+       (require 'vterm nil t)))
 
 (defvar pb/vterm-shell nil)
 
@@ -117,10 +119,6 @@ println(\"Hello, world!\")
       (and (getenv "SHELL")
            (executable-find (getenv "SHELL"))
            (getenv "SHELL"))
-      (and (eq system-type 'windows-nt)
-           (or (executable-find "powershell")
-               (executable-find "bash")
-               (executable-find "cmd")))
       (executable-find "bash")
       "/bin/sh"))
 
@@ -129,10 +127,21 @@ println(\"Hello, world!\")
          (buf    (get-buffer-create name))
          (freshp (not (get-buffer-process buf))))
     (when freshp
-      (with-current-buffer buf
-        (let ((vterm-shell (pb/resolve-shell)))
-          (vterm-mode))))
+      (if pb/use-vterm
+          (with-current-buffer buf
+            (let ((vterm-shell (pb/resolve-shell)))
+              (vterm-mode)))
+        (with-current-buffer buf
+          (shell buf))))
     (cons buf freshp)))
+
+(defun pb/send-to-shell (shell-buf command)
+  "Send COMMAND (a string, without trailing newline) to SHELL-BUF."
+  (if pb/use-vterm
+      (with-current-buffer shell-buf
+        (vterm-send-string (concat command "\n")))
+    (comint-send-string (get-buffer-process shell-buf)
+                        (concat command "\n"))))
 
 (defun pb/display (probe-buf shell-buf)
   (delete-other-windows)
@@ -172,8 +181,7 @@ println(\"Hello, world!\")
          (shell  (pb/ensure-shell lang))
          (sh-buf (car shell)))
     (write-region (buffer-string) nil (pb/src-file lang config))
-    (with-current-buffer sh-buf
-      (vterm-send-string (concat (pb/run-command lang config) "\n")))
+    (pb/send-to-shell sh-buf (pb/run-command lang config))
     (message "pb: running %s..." (pb/probe-name lang))))
 
 (defun pb/open-langs-buffer ()
@@ -226,12 +234,10 @@ println(\"Hello, world!\")
       (local-set-key (kbd "C-c p b") #'pb/rerun-probe))
 
     (when freshp
-      (let ((cmd (pb/run-command lang config)))
-        (write-region (with-current-buffer p-buf (buffer-string))
-                      nil
-                      (pb/src-file lang config))
-        (with-current-buffer sh-buf
-          (vterm-send-string (concat cmd "\n")))))
+      (write-region (with-current-buffer p-buf (buffer-string))
+                    nil
+                    (pb/src-file lang config))
+      (pb/send-to-shell sh-buf (pb/run-command lang config)))
 
     (pb/display p-buf sh-buf)
     (message "pb: opened %s" (pb/probe-name lang))))
