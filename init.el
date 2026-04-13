@@ -27,6 +27,8 @@
 
 (load-file (lwc/config-path "local" "simpc-mode.el"))
 
+;; (add-to-list 'custom-theme-load-path (lwc/config-path "themes"))
+
 (cond
  ((eq system-type 'windows-nt) (load-file (lwc/config-path "windows.el")))
  (t                            (load-file (lwc/config-path "nixos.el"))))

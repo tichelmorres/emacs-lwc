@@ -130,12 +130,12 @@
 
 (defun nu/indent-more-rigidly ()
   (interactive)
-  (if (use-region-p)
-      (let ((start (region-beginning))
-            (end   (region-end)))
-        (let ((deactivate-mark nil))
-          (indent-region start end)))
-    (indent-for-tab-command)))
+  (let ((deactivate-mark nil))
+    (if (use-region-p)
+        (let ((start (region-beginning))
+              (end   (region-end)))
+          (indent-region start end))
+      (indent-for-tab-command))))
 
 (defun nu/toggle-comment (beg end)
   (interactive

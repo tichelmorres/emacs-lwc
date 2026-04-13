@@ -29,7 +29,7 @@
 (setq nu/dash-file (lwc/config-path "dash-nixos.org"))
 (prefer-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
-(add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font Mono-15"))
+(add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font Mono-17"))
 (set-face-attribute 'default nil :weight 'normal)
 ;; (set-face-attribute 'font-lock-comment-face nil :weight 'bold)
 ;; (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
@@ -111,16 +111,16 @@
 ;; |  Theming
 ;; | --------------------------------------------
 
-;; (setq-default header-line-format " ")
-
-(defvar mo/menu-background "#181818")
-(when (display-graphic-p)
-  (require 'color)
-  (set-face-attribute 'header-line nil
-                      :background mo/menu-background
-                      :box nil)
-
-  (set-face-attribute 'menu nil :background mo/menu-background))
-
-(rc/require-theme 'gruber-darker)
-(load-theme 'gruber-darker t)
+;; (if (display-graphic-p)
+;;     (load-theme 'automata t)
+;;   (progn
+    (setq-default header-line-format " ")
+    (defvar mo/menu-background "#181818")
+    (require 'color)
+    (set-face-attribute 'header-line nil
+                        :background mo/menu-background
+                        :box nil)
+    (set-face-attribute 'menu nil :background mo/menu-background)
+    (rc/require-theme 'gruber-darker)
+    (load-theme 'gruber-darker t)
+;; ))

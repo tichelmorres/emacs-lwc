@@ -392,6 +392,9 @@
 (require 'google-translate-smooth-ui)
 (global-set-key (kbd "C-c t") 'google-translate-smooth-translate)
 
+;; Color visualization
+(rc/require 'colorful-mode)
+
 ;; Emacs auto-generated custom file
 (setq custom-file (lwc/config-path "custom.el"))
 (load-file (lwc/config-path "custom.el"))
