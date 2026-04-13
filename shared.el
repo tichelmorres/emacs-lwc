@@ -160,6 +160,9 @@
 (add-hook 'dired-mode-hook #'dired-omit-mode)
 (add-hook 'dired-mode-hook #'nu/wrap-nav-mode)
 
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "C-l") #'dired-find-file))
+
 (defun nu/dired-extension-priority (filename)
   (let* ((base (directory-file-name (file-name-nondirectory filename)))
          (ext  (downcase (or (file-name-extension base) ""))))
