@@ -1,231 +1,378 @@
-(rc/require 'autothemer)
-(require 'autothemer)
+(deftheme automata
+  "An extra refined color theme for Emacs, based on NieR:Automata.")
 
-(autothemer-deftheme
- automata "A refined personal theme for Emacs, roughly based on NieR:Automata's colors."
+(let (
+      (automata-light-white      "#ffffff")
+      (automata-dark-white       "#927e59")
+      (automata-red              "#9d0006")
+      (automata-green            "#79740e")
+      (automata-yellow           "#b57614")
+      (automata-blue             "#076678")
+      (automata-light-magenta    "#c378a7")
+      (automata-dark-magenta     "#8f3f71")
+      (automata-cyan             "#427b58")
+      (automata-light-dimm       "#565f73")
+      (automata-dark-dimm        "#303540")
+      (automata-light-gray       "#504945")
+      (automata-dark-gray        "#282828")
+      (automata-light-brown      "#b3ad91")
+      (automata-dark-brown       "#453d41")
+      (automata-light-black      "#181818")
+      (automata-dark-black       "#000000")
+      (automata-background       "#c2bda6")
+      (automata-foreground       "#48463d")
+      )
 
- (
-  (((class color) (min-colors #xFFFFFF)))
+  (custom-theme-set-variables
+   'automata
+   '(frame-brackground-mode (quote dark)))
 
-  ;; === Palatte ===
+  (custom-theme-set-faces
+   'automata
 
-  ;; White
-  (automata-light-white "#ffffff")
-  (automata-dark-white  "#927e59")
+   ;; Agda2
+   `(agda2-highlight-datatype-face ((t (:foreground ,automata-dark-magenta))))
+   `(agda2-highlight-primitive-type-face ((t (:foreground ,automata-dark-magenta))))
+   `(agda2-highlight-function-face ((t (:foreground ,automata-blue))))
+   `(agda2-highlight-keyword-face ((t ,(list :foreground automata-red
+                                             :bold t))))
+   `(agda2-highlight-inductive-constructor-face ((t (:foreground ,automata-yellow))))
+   `(agda2-highlight-number-face ((t (:foreground ,automata-cyan))))
 
-  ;; Red
-  (automata-red "#9d0006")
+   ;; AUCTeX
+   `(font-latex-bold-face ((t (:foreground ,automata-dark-magenta :bold t))))
+   `(font-latex-italic-face ((t (:foreground ,automata-dark-magenta :italic t))))
+   `(font-latex-math-face ((t (:foreground ,automata-yellow))))
+   `(font-latex-sectioning-5-face ((t ,(list :foreground automata-blue
+                                             :bold t))))
+   `(font-latex-slide-title-face ((t (:foreground ,automata-blue))))
+   `(font-latex-string-face ((t (:foreground ,automata-yellow))))
+   `(font-latex-warning-face ((t (:foreground ,automata-light-magenta))))
 
-  ;; Green
-  (automata-green "#79740e")
+   ;; Basic Coloring (or Uncategorized)
+   `(border ((t ,(list :background automata-light-black
+                       :foreground automata-dark-brown))))
+   `(cursor ((t (:background ,automata-red))))
+   `(default ((t ,(list :foreground automata-foreground
+                        :background automata-background))))
+   `(fringe ((t ,(list :background nil
+                       :foreground automata-dark-brown))))
+   `(vertical-border ((t ,(list :foreground automata-dark-brown))))
+   `(link ((t (:foreground ,automata-blue :underline t))))
+   `(link-visited ((t (:foreground ,automata-cyan :underline t))))
+   `(match ((t (:background ,automata-light-gray))))
+   `(shadow ((t (:foreground ,automata-light-gray))))
+   `(minibuffer-prompt ((t (:foreground ,automata-blue))))
+   `(region ((t (:background ,automata-light-brown :foreground nil))))
+   `(secondary-selection ((t ,(list :background automata-light-brown
+                                    :foreground nil))))
+   `(trailing-whitespace ((t ,(list :foreground automata-dark-black
+                                    :background automata-light-magenta))))
+   `(tooltip ((t ,(list :background automata-light-gray
+                        :foreground automata-light-white))))
 
-  ;; Yellow
-  (automata-yellow "#b57614")
+   ;; Calendar
+   `(holiday-face ((t (:foreground ,automata-light-magenta))))
 
-  ;; Blue
-  (automata-blue "#076678")
+   ;; Compilation
+   `(compilation-info ((t ,(list :foreground automata-yellow
+                                 :inherit 'unspecified))))
+   `(compilation-warning ((t ,(list :foreground automata-green
+                                    :bold t
+                                    :inherit 'unspecified))))
+   `(compilation-error ((t (:foreground ,automata-light-magenta))))
+   `(compilation-mode-line-fail ((t ,(list :foreground automata-light-magenta
+                                           :weight 'bold
+                                           :inherit 'unspecified))))
+   `(compilation-mode-line-exit ((t ,(list :foreground automata-yellow
+                                           :weight 'bold
+                                           :inherit 'unspecified))))
 
-  ;; Magenta
-  (automata-light-magenta "#c378a7")  ;; unused
-  (automata-dark-magenta  "#8f3f71")
+   ;; Completion
+   `(completions-annotations ((t (:inherit 'shadow))))
 
-  ;; Cyan
-  (automata-cyan "#427b58")
+   ;; Custom
+   `(custom-state ((t (:foreground ,automata-yellow))))
 
-  ;; Gray
-  (automata-light-gray "#504945")
-  (automata-dark-gray  "#282828")
+   ;; Diff
+   `(diff-removed ((t ,(list :foreground automata-light-magenta
+                             :background nil))))
+   `(diff-added ((t ,(list :foreground automata-yellow
+                           :background nil))))
 
-  ;; General
-  (automata-background  "#c2bda6")
-  (automata-foreground  "#48463d")
+   ;; Dired
+   `(dired-directory ((t (:foreground ,automata-blue :weight bold))))
+   `(dired-ignored ((t ,(list :foreground automata-dark-magenta
+                              :inherit 'unspecified))))
 
-  ;; Mark
-  (automata-cursor      "#f4f0e1"))
+   ;; Ebrowse
+   `(ebrowse-root-class ((t (:foreground ,automata-blue :weight bold))))
+   `(ebrowse-progress ((t (:background ,automata-blue))))
 
-  ;; === Faces ===
+   ;; Egg
+   `(egg-branch ((t (:foreground ,automata-red))))
+   `(egg-branch-mono ((t (:foreground ,automata-red))))
+   `(egg-diff-add ((t (:foreground ,automata-yellow))))
+   `(egg-diff-del ((t (:foreground ,automata-light-magenta))))
+   `(egg-diff-file-header ((t (:foreground ,automata-cyan))))
+   `(egg-help-header-1 ((t (:foreground ,automata-red))))
+   `(egg-help-header-2 ((t (:foreground ,automata-blue))))
+   `(egg-log-HEAD-name ((t (:box (:color ,automata-foreground)))))
+   `(egg-reflog-mono ((t (:foreground ,automata-light-dimm))))
+   `(egg-section-title ((t (:foreground ,automata-red))))
+   `(egg-text-base ((t (:foreground ,automata-foreground))))
+   `(egg-term ((t (:foreground ,automata-red))))
 
-  (
-    ;; Basic
-    (default (:foreground automata-foreground :background automata-background))
-    (cursor  (:background automata-cursor))
-    (fringe  (:background automata-background))
-    (shadow  (:foreground automata-light-gray))
+   ;; ERC
+   `(erc-notice-face ((t (:foreground ,automata-cyan))))
+   `(erc-timestamp-face ((t (:foreground ,automata-yellow))))
+   `(erc-input-face ((t (:foreground ,automata-light-magenta))))
+   `(erc-my-nick-face ((t (:foreground ,automata-light-magenta))))
 
-    (link         (:foreground automata-blue         :underline t))
-    (link-visited (:foreground automata-dark-magenta :underline t))
-    (match        (:background automata-dark-gray))
-    (highlight    (:background automata-dark-gray    :foreground nil))
+   ;; EShell
+   `(eshell-ls-backup ((t (:foreground ,automata-dark-magenta))))
+   `(eshell-ls-directory ((t (:foreground ,automata-blue))))
+   `(eshell-ls-executable ((t (:foreground ,automata-yellow))))
+   `(eshell-ls-symlink ((t (:foreground ,automata-red))))
 
-    (vertical-border   (:foreground automata-dark-gray))
-    (help-key-binding  (:foreground automata-dark-white :background automata-dark-gray))
-    (region            (:foreground automata-dark-white :background automata-dark-gray))
-    (minibuffer-prompt (:foreground automata-blue))
+   ;; Font Lock
+   `(font-lock-builtin-face ((t (:foreground ,automata-red))))
+   `(font-lock-comment-face ((t (:foreground ,automata-green))))
+   `(font-lock-comment-delimiter-face ((t (:foreground ,automata-green))))
+   `(font-lock-constant-face ((t (:foreground ,automata-dark-magenta))))
+   `(font-lock-doc-face ((t (:foreground ,automata-yellow))))
+   `(font-lock-doc-string-face ((t (:foreground ,automata-yellow))))
+   `(font-lock-function-name-face ((t (:foreground ,automata-blue))))
+   `(font-lock-keyword-face ((t (:foreground ,automata-red :bold t))))
+   `(font-lock-preprocessor-face ((t (:foreground ,automata-dark-magenta))))
+   `(font-lock-reference-face ((t (:foreground ,automata-dark-magenta))))
+   `(font-lock-string-face ((t (:foreground ,automata-yellow))))
+   `(font-lock-type-face ((t (:foreground ,automata-dark-magenta))))
+   `(font-lock-variable-name-face ((t (:foreground ,automata-blue))))
+   `(font-lock-warning-face ((t (:foreground ,automata-light-magenta))))
 
-    (tooltip (:foreground automata-light-white :background automata-dark-gray))
+   ;; Flymake
+   `(flymake-errline
+     ((((supports :underline (:style wave)))
+       (:underline (:style wave :color ,automata-light-magenta)
+                   :foreground unspecified
+                   :background unspecified
+                   :inherit unspecified))
+      (t (:foreground ,automata-light-magenta :weight bold :underline t))))
+   `(flymake-warnline
+     ((((supports :underline (:style wave)))
+       (:underline (:style wave :color ,automata-red)
+                   :foreground unspecified
+                   :background unspecified
+                   :inherit unspecified))
+      (t (:forground ,automata-red :weight bold :underline t))))
+   `(flymake-infoline
+     ((((supports :underline (:style wave)))
+       (:underline (:style wave :color ,automata-yellow)
+                   :foreground unspecified
+                   :background unspecified
+                   :inherit unspecified))
+      (t (:forground ,automata-yellow :weight bold :underline t))))
 
-    ;; Font Lock
-    (font-lock-builtin-face           (:foreground automata-yellow))
-    (font-lock-preprocessor-face      (:foreground automata-red))
-    (font-lock-string-face            (:foreground automata-dark-magenta))
-    (font-lock-doc-face               (:foreground automata-green))
-    (font-lock-type-face              (:foreground automata-red))
-    (font-lock-function-name-face     (:foreground automata-blue))
-    (font-lock-function-call-face     (:foreground automata-cyan))
-    (font-lock-keyword-face           (:foreground automata-blue :bold t))
-    (font-lock-variable-name-face     (:foreground automata-foreground))
-    (font-lock-constant-face          (:foreground automata-light-gray))
-    (font-lock-comment-face           (:foreground automata-dark-white))
-    (font-lock-comment-delimiter-face (:foreground automata-light-gray))
-    (font-lock-reference-face         (:foreground automata-light-gray))
-    (font-lock-warning-face           (:foreground automata-red))
+   ;; Flyspell
+   `(flyspell-incorrect
+     ((((supports :underline (:style wave)))
+       (:underline (:style wave :color ,automata-light-magenta) :inherit unspecified))
+      (t (:foreground ,automata-light-magenta :weight bold :underline t))))
+   `(flyspell-duplicate
+     ((((supports :underline (:style wave)))
+       (:underline (:style wave :color ,automata-red) :inherit unspecified))
+      (t (:foreground ,automata-red :weight bold :underline t))))
 
-    ;; Font Lock (Emacs 29+)
-    (font-lock-bracket-face          (:foreground automata-light-gray))
-    (font-lock-operator-face         (:foreground automata-light-gray))
-    (font-lock-punctuation-face      (:foreground automata-light-gray))
-    (font-lock-delimiter-face        (:foreground automata-light-gray))
-    (font-lock-misc-punctuation-face (:foreground automata-light-gray))
-    (font-lock-number-face           (:foreground automata-dark-magenta))
-    (font-lock-escape-face           (:foreground automata-dark-magenta))
+   ;; Helm
+   `(helm-candidate-number ((t ,(list :background automata-dark-brown
+                                      :foreground automata-red
+                                      :bold t))))
+   `(helm-ff-directory ((t ,(list :foreground automata-blue
+                                  :background automata-background
+                                  :bold t))))
+   `(helm-ff-executable ((t (:foreground ,automata-yellow))))
+   `(helm-ff-file ((t (:foreground ,automata-foreground :inherit unspecified))))
+   `(helm-ff-invalid-symlink ((t ,(list :foreground automata-background
+                                        :background automata-light-magenta))))
+   `(helm-ff-symlink ((t (:foreground ,automata-red :bold t))))
+   `(helm-selection-line ((t (:background ,automata-dark-gray))))
+   `(helm-selection ((t (:background ,automata-dark-gray :underline nil))))
+   `(helm-source-header ((t ,(list :foreground automata-red
+                                   :background automata-background
+                                   :box (list :line-width -1
+                                              :style 'released-button)))))
 
-    ;; Rainbow delimiters
-    (rainbow-delimiters-depth-1-face    (:foreground automata-yellow))
-    (rainbow-delimiters-depth-2-face    (:foreground automata-blue))
-    (rainbow-delimiters-depth-3-face    (:foreground automata-dark-magenta))
-    (rainbow-delimiters-depth-4-face    (:foreground automata-cyan))
-    (rainbow-delimiters-depth-5-face    (:foreground automata-green))
-    (rainbow-delimiters-depth-6-face    (:foreground automata-yellow))
-    (rainbow-delimiters-depth-7-face    (:foreground automata-blue))
-    (rainbow-delimiters-depth-8-face    (:foreground automata-dark-magenta))
-    (rainbow-delimiters-depth-9-face    (:foreground automata-cyan))
-    (rainbow-delimiters-unmatched-face  (:foreground automata-light-white :background automata-red))
-    (rainbow-delimiters-mismatched-face (:foreground automata-light-white :background automata-red))
+   ;; Ido
+   `(ido-first-match ((t (:foreground ,automata-red :bold nil))))
+   `(ido-only-match ((t (:foreground ,automata-green :weight bold))))
+   `(ido-subdir ((t (:foreground ,automata-blue :weight bold))))
 
-    ;; Line numbers
-    (line-number              (:foreground automata-yellow))
-    (line-number-current-line (:foreground automata-yellow :bold t))
+   ;; Info
+   `(info-xref ((t (:foreground ,automata-blue))))
+   `(info-visited ((t (:foreground ,automata-cyan))))
 
-    ;; Mode line
-    (mode-line           (:foreground automata-dark-white  :background automata-dark-gray))
-    (mode-line-inactive  (:foreground automata-dark-gray   :background automata-light-gray))
-    (mode-line-buffer-id (:foreground automata-light-white :background automata-dark-gray))
+   ;; Jabber
+   `(jabber-chat-prompt-foreign ((t ,(list :foreground automata-dark-magenta
+                                           :bold nil))))
+   `(jabber-chat-prompt-local ((t (:foreground ,automata-red))))
+   `(jabber-chat-prompt-system ((t (:foreground ,automata-yellow))))
+   `(jabber-rare-time-face ((t (:foreground ,automata-yellow))))
+   `(jabber-roster-user-online ((t (:foreground ,automata-yellow))))
+   `(jabber-activity-face ((t (:foreground ,automata-light-magenta))))
+   `(jabber-activity-personal-face ((t (:foreground ,automata-red :bold t))))
 
-    ;; Search
-    (isearch                     (:foreground automata-dark-gray   :background automata-yellow))
-    (isearch-fail                (:foreground automata-light-white :background automata-red))
-    (isearch-lazy-highlight-face (:foreground automata-foreground  :background automata-dark-white))
+   ;; Line Highlighting
+   `(highlight ((t (:background ,automata-dark-gray :foreground nil))))
+   `(highlight-current-line-face ((t ,(list :background automata-dark-gray
+                                            :foreground nil))))
 
-    ;; Show Paren
-    (show-paren-match    (:background automata-dark-gray))
-    (show-paren-mismatch (:background automata-red))
+   ;; line numbers
+   `(line-number ((t (:inherit default :foreground ,automata-light-gray))))
+   `(line-number-current-line ((t (:inherit line-number :foreground ,automata-red))))
 
-    ;; Dired
-    (dired-directory (:foreground automata-blue :weight 'bold))
-    (dired-ignored   (:foreground automata-light-gray))
+   ;; Linum
+   `(linum ((t `(list :foreground automata-dark-magenta
+                      :background automata-background))))
 
-    ;; Whitespace
-    (whitespace-space            (:foreground automata-background  :background automata-background))
-    (whitespace-tab              (:foreground automata-background  :background automata-background))
-    (whitespace-newline          (:foreground automata-dark-white  :background automata-background))
-    (whitespace-hspace           (:foreground automata-dark-white  :background automata-background))
-    (whitespace-line             (:foreground automata-red         :background automata-dark-gray))
-    (whitespace-empty            (:foreground automata-red         :background automata-red))
-    (whitespace-trailing         (:foreground automata-red         :background automata-red))
-    (whitespace-indentation      (:foreground automata-red         :background automata-yellow))
-    (whitespace-space-after-tab  (:foreground automata-yellow      :background automata-yellow))
-    (whitespace-space-before-tab (:foreground automata-yellow      :background automata-yellow))
-    (trailing-whitespace         (:foreground automata-light-white :background automata-red))
+   ;; Magit
+   `(magit-branch ((t (:foreground ,automata-blue))))
+   `(magit-diff-hunk-header ((t (:background ,automata-dark-brown))))
+   `(magit-diff-file-header ((t (:background ,automata-light-gray))))
+   `(magit-log-sha1 ((t (:foreground ,automata-light-magenta))))
+   `(magit-log-author ((t (:foreground ,automata-green))))
+   `(magit-log-head-label-remote ((t ,(list :foreground automata-yellow
+                                            :background automata-dark-gray))))
+   `(magit-log-head-label-local ((t ,(list :foreground automata-blue
+                                           :background automata-dark-gray))))
+   `(magit-log-head-label-tags ((t ,(list :foreground automata-red
+                                          :background automata-dark-gray))))
+   `(magit-log-head-label-head ((t ,(list :foreground automata-foreground
+                                          :background automata-dark-gray))))
+   `(magit-item-highlight ((t (:background ,automata-dark-gray))))
+   `(magit-tag ((t ,(list :foreground automata-red
+                          :background automata-background))))
+   `(magit-blame-heading ((t ,(list :background automata-dark-gray
+                                    :foreground automata-foreground))))
 
-    ;; Diff
-    (diff-added   (:foreground automata-green :background nil))
-    (diff-removed (:foreground automata-red   :background nil))
+   ;; Message
+   `(message-header-name ((t (:foreground ,automata-yellow))))
 
-    ;; Compilation
-    (compilation-info           (:foreground automata-green))
-    (compilation-warning        (:foreground automata-yellow :bold t))
-    (compilation-error          (:foreground automata-red))
-    (compilation-mode-line-fail (:foreground automata-red    :weight 'bold))
-    (compilation-mode-line-exit (:foreground automata-green  :weight 'bold))
+   ;; Mode Line
+   `(mode-line ((t ,(list :background automata-dark-gray
+                          :foreground automata-light-white))))
+   `(mode-line-buffer-id ((t ,(list :background automata-dark-gray
+                                    :foreground automata-light-white))))
+   `(mode-line-inactive ((t ,(list :background automata-dark-gray
+                                   :foreground automata-dark-white))))
 
-    ;; Flymake
-    (flymake-error   (:underline (:style 'wave :color automata-red)))
-    (flymake-warning (:underline (:style 'wave :color automata-yellow)))
-    (flymake-note    (:underline (:style 'wave :color automata-green)))
+   ;; Neo Dir
+   `(neo-dir-link-face ((t (:foreground ,automata-blue))))
 
-    ;; Flyspell
-    (flyspell-incorrect (:underline (:style 'wave :color automata-red)))
-    (flyspell-duplicate (:underline (:style 'wave :color automata-yellow)))
+   ;; Org Mode
+   `(org-agenda-structure ((t (:foreground ,automata-blue))))
+   `(org-column ((t (:background ,automata-light-black))))
+   `(org-column-title ((t (:background ,automata-light-black :underline t :weight bold))))
+   `(org-done ((t (:foreground ,automata-yellow))))
+   `(org-todo ((t (:foreground ,automata-dark-magenta))))
+   `(org-upcoming-deadline ((t (:foreground ,automata-red))))
 
-    ;; Ivy
-    (ivy-current-match           (:foreground automata-light-white :background automata-blue))
-    (ivy-prompt-match            (:foreground automata-light-white :background automata-blue))
-    (ivy-minibuffer-match-face-2 (:foreground automata-light-white :background automata-yellow))
-    (ivy-minibuffer-match-face-4 (:foreground automata-light-white :background automata-yellow))
-    (ivy-subdir                  (:foreground automata-light-white :background automata-blue))
+   ;; Search
+   `(isearch ((t ,(list :foreground automata-dark-black
+                        :background automata-light-white))))
+   `(isearch-fail ((t ,(list :foreground automata-dark-black
+                             :background automata-light-magenta))))
+   `(isearch-lazy-highlight-face ((t ,(list
+                                       :foreground automata-blue
+                                       :background automata-light-dimm))))
 
-    ;; Swiper
-    (swiper-line-face    (:foreground automata-light-white :background automata-blue))
-    (swiper-match-face-1 (:foreground automata-dark-gray   :background automata-light-white))
-    (swiper-match-face-3 (:foreground automata-light-white :background automata-red))
+   ;; Sh
+   `(sh-quoted-exec ((t (:foreground ,automata-light-magenta))))
 
-    ;; Ido
-    (ido-first-match (:foreground automata-yellow))
-    (ido-only-match  (:foreground automata-yellow :weight 'bold))
-    (ido-subdir      (:foreground automata-blue   :weight 'bold))
+   ;; Show Paren
+   `(show-paren-match-face ((t (:background ,automata-light-gray))))
+   `(show-paren-mismatch-face ((t (:background ,automata-dark-magenta))))
 
-    ;; Orderless
-    (orderless-match-face-0 (:foreground automata-yellow))
-    (orderless-match-face-1 (:foreground automata-green))
-    (orderless-match-face-2 (:foreground automata-cyan))
-    (orderless-match-face-3 (:foreground automata-light-gray))
+   ;; Slime
+   `(slime-repl-inputed-output-face ((t (:foreground ,automata-light-magenta))))
 
-    ;; Company
-    (company-tooltip                  (:foreground automata-foreground  :background automata-dark-gray))
-    (company-tooltip-selection        (:foreground automata-light-white :background automata-dark-gray))
-    (company-tooltip-annotation       (:foreground automata-yellow      :background automata-dark-gray))
-    (company-tooltip-common           (:foreground automata-green))
-    (company-tooltip-common-selection (:foreground automata-green))
-    (company-scrollbar-fg             (:background automata-light-gray))
-    (company-scrollbar-bg             (:background automata-dark-gray))
-    (company-preview                  (:background automata-green))
-    (company-preview-common           (:foreground automata-green       :background automata-dark-gray))
+   ;; Tuareg
+   `(tuareg-font-lock-governing-face ((t (:foreground ,automata-red))))
 
-    ;; Org
-    (org-agenda-structure  (:foreground automata-blue))
-    (org-done              (:foreground automata-green))
-    (org-todo              (:foreground automata-red))
-    (org-upcoming-deadline (:foreground automata-yellow))
+   ;; Speedbar
+   `(speedbar-directory-face ((t ,(list :foreground automata-blue
+                                        :weight 'bold))))
+   `(speedbar-file-face ((t (:foreground ,automata-foreground))))
+   `(speedbar-highlight-face ((t (:background ,automata-dark-gray))))
+   `(speedbar-selected-face ((t (:foreground ,automata-light-magenta))))
+   `(speedbar-tag-face ((t (:foreground ,automata-red))))
 
-    ;; Magit
-    (magit-branch        (:foreground automata-blue))
-    (magit-tag           (:foreground automata-yellow     :background automata-background))
-    (magit-log-sha1      (:foreground automata-red))
-    (magit-log-author    (:foreground automata-yellow))
-    (magit-item-highlight (:background automata-dark-gray))
-    (magit-blame-heading (:foreground automata-foreground :background automata-dark-gray))
+   ;; Which Function
+   `(which-func ((t (:foreground ,automata-cyan))))
 
-    ;; EShell
-    (eshell-ls-backup     (:foreground automata-light-gray))
-    (eshell-ls-directory  (:foreground automata-blue))
-    (eshell-ls-executable (:foreground automata-green))
-    (eshell-ls-symlink    (:foreground automata-yellow))
+   ;; Whitespace
+   `(whitespace-space ((t ,(list :background automata-background
+                                 :foreground automata-dark-gray))))
+   `(whitespace-tab ((t ,(list :background automata-background
+                               :foreground automata-dark-gray))))
+   `(whitespace-hspace ((t ,(list :background automata-background
+                                  :foreground automata-dark-brown))))
+   `(whitespace-line ((t ,(list :background automata-dark-brown
+                                :foreground automata-light-magenta))))
+   `(whitespace-newline ((t ,(list :background automata-background
+                                   :foreground automata-dark-brown))))
+   `(whitespace-trailing ((t ,(list :background automata-red
+                                    :foreground automata-red))))
+   `(whitespace-empty ((t ,(list :background automata-light-magenta
+                                 :foreground automata-light-magenta))))
+   `(whitespace-indentation ((t ,(list :background automata-red
+                                       :foreground automata-light-magenta))))
+   `(whitespace-space-after-tab ((t ,(list :background automata-red
+                                           :foreground automata-red))))
+   `(whitespace-space-before-tab ((t ,(list :background automata-green
+                                            :foreground automata-green))))
 
-    ;; Tab bar
-    (tab-bar              (:foreground automata-light-gray :background automata-dark-gray))
-    (tab-bar-tab          (:foreground automata-yellow     :background nil :weight 'bold))
-    (tab-bar-tab-inactive (:foreground automata-light-gray :background nil))
+   ;; tab-bar
+   `(tab-bar ((t (:background ,automata-dark-gray :foreground ,automata-light-gray))))
+   `(tab-bar-tab ((t (:background nil :foreground ,automata-red :weight bold))))
+   `(tab-bar-tab-inactive ((t (:background nil))))
 
-    ;; Term / vterm
-    (term-color-black   (:foreground automata-dark-gray    :background automata-dark-gray))
-    (term-color-red     (:foreground automata-red          :background automata-red))
-    (term-color-green   (:foreground automata-green        :background automata-green))
-    (term-color-yellow  (:foreground automata-yellow       :background automata-yellow))
-    (term-color-blue    (:foreground automata-blue         :background automata-blue))
-    (term-color-magenta (:foreground automata-dark-magenta :background automata-dark-magenta))
-    (term-color-cyan    (:foreground automata-cyan         :background automata-cyan))
-    (term-color-white   (:foreground automata-light-white  :background automata-light-white))
-  )
-)
+   ;; vterm / ansi-term
+   `(term-color-black ((t (:foreground ,automata-light-brown :background ,automata-light-gray))))
+   `(term-color-red ((t (:foreground ,automata-red :background ,automata-dark-magenta))))
+   `(term-color-green ((t (:foreground ,automata-green :background ,automata-yellow))))
+   `(term-color-blue ((t (:foreground ,automata-blue :background ,automata-blue))))
+   `(term-color-yellow ((t (:foreground ,automata-yellow :background ,automata-red))))
+   `(term-color-magenta ((t (:foreground ,automata-cyan :background ,automata-cyan))))
+   `(term-color-cyan ((t (:foreground ,automata-dark-magenta :background ,automata-dark-magenta))))
+   `(term-color-white ((t (:foreground ,automata-foreground :background ,automata-light-white))))
+
+   ;; company-mode
+   `(company-tooltip ((t (:foreground ,automata-foreground :background ,automata-dark-gray))))
+   `(company-tooltip-annotation ((t (:foreground ,automata-green :background ,automata-dark-gray))))
+   `(company-tooltip-annotation-selection ((t (:foreground ,automata-green :background ,automata-light-black))))
+   `(company-tooltip-selection ((t (:foreground ,automata-foreground :background ,automata-light-black))))
+   `(company-tooltip-mouse ((t (:background ,automata-light-black))))
+   `(company-tooltip-common ((t (:foreground ,automata-yellow))))
+   `(company-tooltip-common-selection ((t (:foreground ,automata-yellow))))
+   `(company-scrollbar-fg ((t (:background ,automata-light-black))))
+   `(company-scrollbar-bg ((t (:background ,automata-dark-brown))))
+   `(company-preview ((t (:background ,automata-yellow))))
+   `(company-preview-common ((t (:foreground ,automata-yellow :background ,automata-light-black))))
+
+   ;; Proof General
+   `(proof-locked-face ((t (:background ,automata-dark-dimm))))
+
+   ;; Orderless
+   `(orderless-match-face-0 ((t (:foreground ,automata-red))))
+   `(orderless-match-face-1 ((t (:foreground ,automata-yellow))))
+   `(orderless-match-face-2 ((t (:foreground ,automata-green))))
+   `(orderless-match-face-3 ((t (:foreground ,automata-dark-magenta))))
+   ))
+
+;;;###autoload
+(when load-file-name
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
 
 (provide-theme 'automata)
