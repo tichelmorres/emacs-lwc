@@ -27,7 +27,9 @@
     beginning-of-line      end-of-line
     move-beginning-of-line move-end-of-line
     beginning-of-buffer    end-of-buffer
-    scroll-up-command      scroll-down-command))
+    scroll-up-command      scroll-down-command
+    nu/wrap-next-line      nu/wrap-previous-line
+    nu/wrap-forward-char   nu/wrap-backward-char))
 
 (defun nu/pre-command-deselect-on-move ()
   (when (and (use-region-p)
@@ -292,7 +294,7 @@
   (= (line-beginning-position) (line-end-position)))
 
 (defun nu/wrap-next-line ()
-  (interactive)
+  (interactive "^")
   (if (derived-mode-p 'dired-mode)
       (nu/wrap-nav--dired-next-line)
     (let ((col (current-column)))
@@ -306,7 +308,7 @@
       (move-to-column col))))
 
 (defun nu/wrap-previous-line ()
-  (interactive)
+  (interactive "^")
   (if (derived-mode-p 'dired-mode)
       (nu/wrap-nav--dired-previous-line)
     (let ((col (current-column)))
@@ -320,13 +322,13 @@
       (move-to-column col))))
 
 (defun nu/wrap-forward-char ()
-  (interactive)
+  (interactive "^")
   (if (eolp)
       (beginning-of-line)
     (forward-char)))
 
 (defun nu/wrap-backward-char ()
-  (interactive)
+  (interactive "^")
   (if (bolp)
       (end-of-line)
     (backward-char)))

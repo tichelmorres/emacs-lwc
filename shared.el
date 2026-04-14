@@ -161,7 +161,15 @@
 (add-hook 'dired-mode-hook #'nu/wrap-nav-mode)
 
 (with-eval-after-load 'dired
-  (define-key dired-mode-map (kbd "C-l") #'dired-find-file))
+  (define-key dired-mode-map (kbd "C-l") #'dired-find-file)
+  (define-key dired-mode-map (kbd "C-<down>")
+    (lambda () (interactive "^")
+      (forward-line 5)
+      (ignore-errors (dired-move-to-filename))))
+  (define-key dired-mode-map (kbd "C-<up>")
+    (lambda () (interactive "^")
+      (forward-line -5)
+      (ignore-errors (dired-move-to-filename)))))
 
 (defun nu/dired-extension-priority (filename)
   (let* ((base (directory-file-name (file-name-nondirectory filename)))
