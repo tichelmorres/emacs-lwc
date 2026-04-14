@@ -160,7 +160,7 @@
                    :foreground          unspecified
                    :background          unspecified
                    :inherit             unspecified                    ))
-       (t (        :forground          ,automata-red
+       (t (        :foreground         ,automata-red
                    :weight bold :underline t                           ))))
 
    `(flymake-infoline
@@ -169,7 +169,7 @@
                    :foreground          unspecified
                    :background          unspecified
                    :inherit             unspecified                    ))
-       (t (        :forground          ,automata-yellow 
+       (t (        :foreground         ,automata-yellow 
                    :weight bold :underline t                           ))))
 
    ;; Flyspell
