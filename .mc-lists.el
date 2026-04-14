@@ -5,10 +5,11 @@
       '(
         cua-paste
         nu/indent-more-rigidly
+        nu/undo
         ))
 
 (setq mc/cmds-to-run-once
       '(
-        nu/select-word-or-next
         nu/select-all-occurrences
+        nu/select-word-or-next
         ))
