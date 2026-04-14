@@ -23,5 +23,14 @@
               (let ((win (get-buffer-window (current-buffer) t)))
                 (when win (with-selected-window win (recenter (/ (window-body-height) 2))))))))
 
-(rc/require-theme 'gruber-darker)
-(load-theme 'gruber-darker t)
+(load-theme 'automata t)
+
+;; (setq-default header-line-format " ")
+;; (defvar mo/menu-background "#181818")
+;; (require 'color)
+;; (set-face-attribute 'header-line nil
+;;                     :background mo/menu-background
+;;                     :box nil)
+;; (set-face-attribute 'menu nil :background mo/menu-background)
+;; (rc/require-theme 'gruber-darker)
+;; (load-theme 'gruber-darker t)
