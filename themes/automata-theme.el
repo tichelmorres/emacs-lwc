@@ -1,3 +1,50 @@
+;;; automata-theme.el --- An extra refined color theme for Emacs, based on NieR:Automata. -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2026 Michel T. Soares a.k.a. tichelmorres
+
+;; Author: Michel T. Soares <qualquercoisahhhh@gmail.com>
+;; URL: http://github.com/tichelmorres/automata-theme
+;; Version: 0.1
+
+;; Permission is hereby granted, free of charge, to any person
+;; obtaining a copy of this software and associated documentation
+;; files (the "Software"), to deal in the Software without
+;; restriction, including without limitation the rights to use, copy,
+;; modify, merge, publish, distribute, sublicense, and/or sell copies
+;; of the Software, and to permit persons to whom the Software is
+;; furnished to do so, subject to the following conditions:
+
+;; The above copyright notice and this permission notice shall be
+;; included in all copies or substantial portions of the Software.
+;;
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+;; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+;; BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+;; ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+;; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+;; SOFTWARE.
+
+;;; Commentary:
+;;
+;; automata-theme.el is a color theme for Emacs inspired by the visual
+;; identity of NieR:Automata, the 2017 action RPG directed by YOKO TARO
+;; and developed by PlatinumGames.
+;;
+;; "automata" refers to the YoRHa combat units built to wage war on
+;; behalf of a mankind that may no longer exist, questioning their own
+;; purpose and consciousness along the way. The theme borrows that name
+;; as a homage to the quiet melancholy and discipline that define the
+;; game's artistic direction.
+;;
+;; NieR:Automata's UI and color identity were crafted by Hisayoshi Kijima,
+;; who served as both UI and mecha designer on the project. Kijima described
+;; his guiding concept as something "systematic and sterile, but also
+;; beautiful", achieved with a warm beige palette, deliberately flat, with
+;; color reserved for moments that demand it. This theme would not exist
+;; without that vision.
+
 (deftheme automata
   "An extra refined color theme for Emacs, based on NieR:Automata.")
 
@@ -59,20 +106,22 @@
    `(font-latex-warning-face      ((t  (     :foreground ,automata-light-magenta         ))))
 
    ;; Basic Coloring (or Uncategorized)
-   `(border              ((t ,(list :background  automata-light-black :foreground automata-dark-brown   ))))
-   `(cursor              ((t  (     :background ,automata-red                                           ))))
-   `(default             ((t ,(list :foreground  automata-foreground  :background automata-background   ))))
-   `(fringe              ((t ,(list :background  nil                  :foreground automata-dark-brown   ))))
-   `(vertical-border     ((t ,(list :foreground  automata-dark-brown                                    ))))
-   `(link                ((t  (     :foreground ,automata-blue        :underline t                      ))))
-   `(link-visited        ((t  (     :foreground ,automata-teal        :underline t                      ))))
-   `(match               ((t  (     :background ,automata-light-gray                                    ))))
-   `(shadow              ((t  (     :foreground ,automata-light-gray                                    ))))
-   `(minibuffer-prompt   ((t  (     :foreground ,automata-blue                                          ))))
-   `(region              ((t  (     :background ,automata-light-brown :foreground nil                   ))))
-   `(secondary-selection ((t ,(list :background  automata-light-brown :foreground nil                   ))))
-   `(trailing-whitespace ((t ,(list :foreground  automata-dark-black  :background automata-light-magenta))))
-   `(tooltip             ((t ,(list :background  automata-light-gray  :foreground automata-light-white  ))))
+   `(border              ((t ,(list :background  automata-light-black :foreground automata-dark-brown           ))))
+   `(cursor              ((t  (     :background ,automata-red                                                   ))))
+   `(default             ((t ,(list :foreground  automata-foreground  :background automata-background           ))))
+   `(fringe              ((t ,(list :background  nil                  :foreground automata-dark-brown           ))))
+   `(vertical-border     ((t ,(list :foreground  automata-dark-brown                                            ))))
+   `(link                ((t  (     :foreground ,automata-blue        :underline t                              ))))
+   `(link-visited        ((t  (     :foreground ,automata-teal        :underline t                              ))))
+   `(match               ((t  (     :background ,automata-light-gray                                            ))))
+   `(shadow              ((t  (     :foreground ,automata-light-gray                                            ))))
+   `(minibuffer-prompt   ((t  (     :foreground ,automata-blue                                                  ))))
+   `(region              ((t  (     :background ,automata-light-brown :foreground nil                           ))))
+   `(secondary-selection ((t ,(list :background  automata-light-brown :foreground nil                           ))))
+   `(trailing-whitespace ((t ,(list :foreground  automata-dark-black  :background automata-light-magenta        ))))
+   `(tooltip             ((t ,(list :background  automata-light-gray  :foreground automata-light-white          ))))
+   `(warning             ((t  (     :foreground ,automata-light-magenta                                         ))))
+   `(header-line         ((t  (     :background ,automata-dark-gray   :foreground ,automata-light-white :box nil))))
 
    ;; Calendar
    `(holiday-face ((t (:foreground ,automata-light-magenta))))
@@ -117,10 +166,23 @@
    `(egg-term             ((t (:foreground  ,automata-red          ))))
 
    ;; ERC
-   `(erc-notice-face    ((t (:foreground ,automata-teal         ))))
-   `(erc-timestamp-face ((t (:foreground ,automata-yellow       ))))
-   `(erc-input-face     ((t (:foreground ,automata-light-magenta))))
-   `(erc-my-nick-face   ((t (:foreground ,automata-light-magenta))))
+   `(erc-notice-face            ((t (:foreground ,automata-green                          ))))
+   `(erc-input-face             ((t (:foreground ,automata-foreground                     ))))
+   `(erc-default-face           ((t (:inherit    'default                                 ))))
+   `(erc-direct-msg-face        ((t (:foreground ,automata-dark-magenta                   ))))
+   `(erc-error-face             ((t (:foreground ,automata-light-magenta                  ))))
+   `(erc-header-line            ((t (:inherit    'header-line                             ))))
+   `(erc-nick-msg-face          ((t (:foreground ,automata-dark-magenta                   ))))
+   `(erc-nick-prefix-face       ((t (:inherit    'erc-nick-default-face                   ))))
+   `(erc-my-nick-prefix-face    ((t (:inherit    'erc-my-nick-face                        ))))
+   `(erc-timestamp-face         ((t (:foreground ,automata-blue       :bold t             ))))
+   `(erc-my-nick-face           ((t (:foreground ,automata-red        :bold t             ))))
+   `(erc-current-nick-face      ((t (:foreground ,automata-green      :bold t             ))))
+   `(erc-prompt-face            ((t (:foreground ,automata-red        :bold t             ))))
+   `(erc-action-face            ((t (                                 :bold t             ))))
+   `(erc-command-indicator-face ((t (                                 :bold t             ))))
+   `(erc-nick-default-face      ((t (                                 :bold t             ))))
+   `(erc-button                 ((t (                                 :bold t :underline t))))
 
    ;; EShell
    `(eshell-ls-backup     ((t (:foreground ,automata-dark-magenta))))
@@ -130,8 +192,8 @@
 
    ;; Font Lock
    `(font-lock-builtin-face           ((t (:foreground ,automata-red          ))))
-   `(font-lock-comment-face           ((t (:foreground ,automata-green        ))))
-   `(font-lock-comment-delimiter-face ((t (:foreground ,automata-green        ))))
+   `(font-lock-comment-face           ((t (:foreground ,automata-dark-white   ))))
+   `(font-lock-comment-delimiter-face ((t (:foreground ,automata-dark-white   ))))
    `(font-lock-constant-face          ((t (:foreground ,automata-dark-magenta ))))
    `(font-lock-doc-face               ((t (:foreground ,automata-yellow       ))))
    `(font-lock-doc-string-face        ((t (:foreground ,automata-yellow       ))))
@@ -146,31 +208,31 @@
 
    ;; Flymake
    `(flymake-errline
-     ((((supports :underline (:style wave                              )))
-       (:underline (:style wave :color ,automata-light-magenta         )
+     ((((supports :underline (:style wave                     )))
+       (:underline (:style wave :color ,automata-light-magenta)
                    :foreground          unspecified
                    :background          unspecified
-                   :inherit             unspecified                    ))
+                   :inherit             unspecified           ))
       (t (         :foreground         ,automata-light-magenta
-                   :weight bold :underline t                           ))))
+                   :weight bold :underline t                  ))))
 
    `(flymake-warnline
-     ((((supports :underline (:style wave                              )))
-       (:underline (:style wave :color ,automata-red                   )
+     ((((supports :underline (:style wave                      )))
+       (:underline (:style wave :color ,automata-red           )
                    :foreground          unspecified
                    :background          unspecified
-                   :inherit             unspecified                    ))
+                   :inherit             unspecified            ))
        (t (        :foreground         ,automata-red
-                   :weight bold :underline t                           ))))
+                   :weight bold :underline t                   ))))
 
    `(flymake-infoline
-     ((((supports :underline (:style wave                              )))
-       (:underline (:style wave :color ,automata-yellow                )
+     ((((supports :underline (:style wave                      )))
+       (:underline (:style wave :color ,automata-yellow        )
                    :foreground          unspecified
                    :background          unspecified
-                   :inherit             unspecified                    ))
+                   :inherit             unspecified            ))
        (t (        :foreground         ,automata-yellow 
-                   :weight bold :underline t                           ))))
+                   :weight bold :underline t                   ))))
 
    ;; Flyspell
    `(flyspell-incorrect
@@ -181,11 +243,11 @@
                     :weight bold :underline t                      ))))
 
    `(flyspell-duplicate
-     ((((supports :underline (:style wave           )))
-       (:underline (:style wave :color ,automata-red)
-                    :inherit            unspecified ))
+     ((((supports :underline (:style wave                          )))
+       (:underline (:style wave :color ,automata-red               )
+                    :inherit            unspecified                ))
        (t (         :foreground        ,automata-red
-                    :weight bold :underline t       ))))
+                    :weight bold :underline t                      ))))
 
    ;; Helm
    `(helm-candidate-number   ((t ,(list :background  automata-dark-brown :foreground automata-red :bold t       ))))
@@ -222,8 +284,17 @@
    `(highlight-current-line-face ((t ,(list :background  automata-dark-gray :foreground nil))))
 
    ;; Line Numbers
-   `(line-number              ((t (:inherit default     :foreground ,automata-light-gray))))
-   `(line-number-current-line ((t (:inherit line-number :foreground ,automata-red       ))))
+   `(line-number              ((t (:inherit            default     :foreground    ,automata-light-gray
+                                   :distant-foreground unspecified
+                                   :weight             normal      :slant          unspecified
+                                   :underline          unspecified :strike-through unspecified
+                                   ))))
+
+   `(line-number-current-line ((t (:inherit            line-number :foreground    ,automata-red
+                                   :distant-foreground unspecified
+                                   :weight             bold        :slant          unspecified
+                                   :underline          unspecified :strike-through unspecified
+                                   ))))
 
    ;; Linum
    `(linum ((t `(list :foreground automata-dark-magenta :background automata-background))))
@@ -270,7 +341,9 @@
    `(sh-quoted-exec ((t (:foreground ,automata-light-magenta))))
 
    ;; Show Paren
-   `(show-paren-match-face    ((t (:background ,automata-light-gray  ))))
+   `(show-paren-match         ((t (:background ,automata-dark-white  ))))
+   `(show-paren-match-face    ((t (:inherit    'show-paren-match     ))))
+   `(show-paren-mismatch      ((t (:background ,automata-dark-magenta))))
    `(show-paren-mismatch-face ((t (:background ,automata-dark-magenta))))
 
    ;; Slime
@@ -295,10 +368,10 @@
    `(whitespace-hspace           ((t ,(list :background automata-background    :foreground automata-dark-brown   ))))
    `(whitespace-line             ((t ,(list :background automata-dark-brown    :foreground automata-light-magenta))))
    `(whitespace-newline          ((t ,(list :background automata-background    :foreground automata-dark-brown   ))))
-   `(whitespace-trailing         ((t ,(list :background automata-teal          :foreground automata-red          ))))
+   `(whitespace-trailing         ((t ,(list :background automata-dark-brown    :foreground automata-blue         ))))
    `(whitespace-empty            ((t ,(list :background automata-light-magenta :foreground automata-light-magenta))))
-   `(whitespace-indentation      ((t ,(list :background automata-red           :foreground automata-light-magenta))))
-   `(whitespace-space-after-tab  ((t ,(list :background automata-red           :foreground automata-red          ))))
+   `(whitespace-indentation      ((t ,(list :background automata-light-white   :foreground automata-red          ))))
+   `(whitespace-space-after-tab  ((t ,(list :background automata-light-white   :foreground automata-blue         ))))
    `(whitespace-space-before-tab ((t ,(list :background automata-green         :foreground automata-green        ))))
 
    ;; Tab-bar
@@ -345,3 +418,10 @@
                (file-name-as-directory (file-name-directory load-file-name))))
 
 (provide-theme 'automata)
+
+;; Local Variables:
+;; no-byte-compile: t
+;; indent-tabs-mode: nil
+;; eval: (when (fboundp 'colorful-mode) (colorful-mode +1))
+;; End:
+;;; automata-theme.el ends here.

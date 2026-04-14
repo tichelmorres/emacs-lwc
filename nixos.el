@@ -14,13 +14,13 @@
 
 (with-eval-after-load 'man
   (advice-add 'Man-completion-table :around
-    (lambda (orig string pred action)
-      (unless Man-completion-cache
-        (setq Man-completion-cache
-              (condition-case err
-                  (nu/man-pages-from-manpath)
-                (error (message "man completion: %s" err) nil))))
-      (funcall orig string pred action))))
+              (lambda (orig string pred action)
+                (unless Man-completion-cache
+                  (setq Man-completion-cache
+                        (condition-case err
+                            (nu/man-pages-from-manpath)
+                          (error (message "man completion: %s" err) nil))))
+                (funcall orig string pred action))))
 
 ;; | --------------------------------------------
 ;; |  Dashboard
@@ -111,16 +111,12 @@
 ;; |  Theming
 ;; | --------------------------------------------
 
-(if (display-graphic-p)
-    (load-theme 'automata t)
-  (progn
-    (setq-default header-line-format " ")
-    (defvar mo/menu-background "#181818")
-    (require 'color)
-    (set-face-attribute 'header-line nil
-                        :background mo/menu-background
-                        :box nil)
-    (set-face-attribute 'menu nil :background mo/menu-background)
-    (rc/require-theme 'gruber-darker)
-    (load-theme 'gruber-darker t)
-))
+(setq-default header-line-format " ")
+(defvar mo/menu-background "#181818")
+(require 'color)
+(set-face-attribute 'header-line nil
+                    :background mo/menu-background
+                    :box nil)
+(set-face-attribute 'menu nil :background mo/menu-background)
+(rc/require-theme 'gruber-darker)
+(load-theme 'gruber-darker t)

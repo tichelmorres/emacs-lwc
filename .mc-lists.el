@@ -4,12 +4,13 @@
 (setq mc/cmds-to-run-for-all
       '(
         cua-paste
+        keyboard-escape-quit
         nu/indent-more-rigidly
-        nu/undo
         ))
 
 (setq mc/cmds-to-run-once
       '(
         nu/select-all-occurrences
         nu/select-word-or-next
+        nu/undo
         ))
