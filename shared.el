@@ -246,6 +246,15 @@
 (global-unset-key (kbd "C-x C--"))
 (global-unset-key (kbd "C-x C-_"))
 
+;; EWW
+(global-set-key (kbd "C-e") #'eww)
+(with-eval-after-load 'eww
+  (define-key eww-mode-map (kbd "M-<left>")  #'eww-back-url)
+  (define-key eww-mode-map (kbd "M-<right>") #'eww-forward-url))
+
+;; Make ESC act like a universal quit
+(global-set-key [escape] #'keyboard-escape-quit)
+
 ;; C-p => select current line, cursor at end of line
 (global-set-key (kbd "C-p") #'nu/select-line)
 
