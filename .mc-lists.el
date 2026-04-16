@@ -5,6 +5,7 @@
       '(
         cua-paste
         keyboard-escape-quit
+        nu/backward-delete-word
         nu/indent-more-rigidly
         ))
 

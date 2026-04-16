@@ -24,9 +24,7 @@
 (load-file (lwc/config-path "local" "nu.el"))
 (load-file (lwc/config-path "local" "la.el"))
 (load-file (lwc/config-path "local" "pb.el"))
-
 (load-file (lwc/config-path "local" "simpc-mode.el"))
-
 (add-to-list 'custom-theme-load-path (lwc/config-path "themes"))
 
 (cond

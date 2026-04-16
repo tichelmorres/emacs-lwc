@@ -111,16 +111,8 @@
 ;; |  Theming
 ;; | --------------------------------------------
 
-(if (display-graphic-p)
-    (load-theme 'automata t)
-  (progn
-    (setq-default header-line-format " ")
-    (defvar mo/menu-background "#181818")
-    (require 'color)
-    (set-face-attribute 'header-line nil
-                        :background mo/menu-background
-                        :box nil)
-    (set-face-attribute 'menu nil :background mo/menu-background)
-    (rc/require-theme 'gruber-darker)
-    (load-theme 'gruber-darker t)
-))
+;; (if (display-graphic-p)
+;;     (load-theme 'automata t)
+;;   (progn
+    (load-theme 'konosuba t)
+;; ))

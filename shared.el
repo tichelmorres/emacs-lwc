@@ -34,6 +34,9 @@
 (scroll-bar-mode -1)
 (horizontal-scroll-bar-mode -1)
 
+;; Stop blinking
+(blink-cursor-mode 0)
+
 ;; Disable top/bottom padding while scrolling
 (setq scroll-margin 0)
 
