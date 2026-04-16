@@ -28,13 +28,16 @@
 ;; Use space characters, not tabs
 (setq-default indent-tabs-mode nil)
 
+;; Disable annoying GUI dialogs
+(setq use-dialog-box nil)
+
 ;; Disable menu bar, toolbar and scrollbars
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (horizontal-scroll-bar-mode -1)
 
-;; Stop blinking
+;; Stop the cursor from blinking
 (blink-cursor-mode 0)
 
 ;; Disable top/bottom padding while scrolling

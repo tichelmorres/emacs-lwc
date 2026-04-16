@@ -29,6 +29,8 @@
 
 (cond
  ((eq system-type 'windows-nt) (load-file (lwc/config-path "windows.el")))
- (t                            (load-file (lwc/config-path "nixos.el"))))
+ (t
+  (load-file (lwc/config-path "nixos.el"))
+  (load-file (lwc/config-path "local" "nora.el"))))
 
 (load-file (lwc/config-path "shared.el"))
