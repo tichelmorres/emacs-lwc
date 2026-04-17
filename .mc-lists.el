@@ -15,4 +15,5 @@
         nu/select-all-occurrences
         nu/select-word-or-next
         nu/undo
+        pb/save-probe
         ))

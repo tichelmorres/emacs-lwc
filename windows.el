@@ -23,7 +23,8 @@
               (let ((win (get-buffer-window (current-buffer) t)))
                 (when win (with-selected-window win (recenter (/ (window-body-height) 2))))))))
 
-(load-theme 'automata t)
+;; (load-theme 'automata t)
+(load-theme 'konosuba t)
 
 ;; (setq-default header-line-format " ")
 ;; (defvar mo/menu-background "#181818")
