@@ -339,8 +339,8 @@
    `(term-color-green   ((t (:foreground ,konosuba-green       :background ,konosuba-yellow     ))))
    `(term-color-blue    ((t (:foreground ,konosuba-blue        :background ,konosuba-blue       ))))
    `(term-color-yellow  ((t (:foreground ,konosuba-yellow      :background ,konosuba-red        ))))
-   `(term-color-magenta ((t (:foreground ,konosuba-cyan        :background ,konosuba-cyan       ))))
-   `(term-color-cyan    ((t (:foreground ,konosuba-green       :background ,konosuba-green      ))))
+   `(term-color-magenta ((t (:foreground ,konosuba-magenta     :background ,konosuba-magenta    ))))
+   `(term-color-cyan    ((t (:foreground ,konosuba-cyan        :background ,konosuba-cyan       ))))
    `(term-color-white   ((t (:foreground ,konosuba-foreground  :background ,konosuba-light-white))))
 
    ;; Company-mode

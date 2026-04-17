@@ -11,6 +11,7 @@
 
 (setq mc/cmds-to-run-once
       '(
+        la/latex-compile-and-open
         nu/select-all-occurrences
         nu/select-word-or-next
         nu/undo
