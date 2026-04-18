@@ -181,6 +181,7 @@
 (add-hook 'dired-mode-hook #'nu/wrap-nav-mode)
 
 (with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "C-b")       nil)
   (define-key dired-mode-map (kbd "C-f")       #'isearch-forward)
   (define-key dired-mode-map (kbd "C-l")       #'dired-find-file)
   (define-key dired-mode-map (kbd "M-<left>")  #'dired-up-directory)

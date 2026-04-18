@@ -153,79 +153,85 @@
 (defun nu/goto-link-source ()
   (interactive)
   (require 'subr-x)
-  (cond
-   ((string= (buffer-name) "*games*")
-    (let* ((line  (string-trim (thing-at-point 'line t)))
-           (game  (intern-soft line)))
-      (if (and game (commandp game))
-          (progn
-            (kill-buffer "*games*")
-            (call-interactively game))
-        (message "No game found at point: %s" line))))
+  (condition-case err
+      (cond
+       ((string= (buffer-name) "*games*")
+        (let* ((line  (string-trim (thing-at-point 'line t)))
+               (game  (intern-soft line)))
+          (if (and game (commandp game))
+              (progn
+                (kill-buffer "*games*")
+                (call-interactively game))
+            (message "No game found at point: %s" line))))
 
-   ((string= (buffer-name) "*probe-langs*")
-    (let* ((line   (string-trim (thing-at-point 'line t)))
-           (opener (gethash line pb/lang-openers)))
-      (if opener
-          (progn
-            (kill-buffer "*probe-langs*")
-            (call-interactively opener))
-        (message "No language found at point: %s" line))))
+       ((string= (buffer-name) "*probe-langs*")
+        (let* ((line   (string-trim (thing-at-point 'line t)))
+               (opener (gethash line pb/lang-openers)))
+          (if opener
+              (progn
+                (kill-buffer "*probe-langs*")
+                (call-interactively opener))
+            (message "No language found at point: %s" line))))
 
-   ((derived-mode-p 'compilation-mode)
-    (condition-case err
-        (compile-goto-error)
-      (error (message "No error location at point: %s" (error-message-string err)))))
+       ((derived-mode-p 'compilation-mode)
+        (condition-case err
+            (compile-goto-error)
+          (error (message "No error location at point: %s" (error-message-string err)))))
 
-   ((derived-mode-p 'org-mode)
-    (let* ((el (ignore-errors (org-element-context)))
-           (is-link (and el (eq (org-element-type el) 'link)))
-           (raw (and is-link (org-element-property :raw-link el)))
-           (type (and is-link (org-element-property :type el))))
-      (if (and raw (or (string= type "eww") (string-match-p "\\`eww:" raw)))
-          (let ((url (replace-regexp-in-string "\\`eww:" "" raw)))
-            (require 'eww)
-            (eww-browse-url url)
-            (delete-other-windows))
-        (let ((cmd (key-binding (kbd "C-u C-c C-o C-x 1"))))
-          (if (commandp cmd)
-              (call-interactively cmd)
-            (execute-kbd-macro (kbd "C-u C-c C-o C-x 1")))))))
+       ((derived-mode-p 'org-mode)
+        (let* ((el (ignore-errors (org-element-context)))
+               (is-link (and el (eq (org-element-type el) 'link)))
+               (raw (and is-link (org-element-property :raw-link el)))
+               (type (and is-link (org-element-property :type el))))
+          (if (and raw (or (string= type "eww") (string-match-p "\\`eww:" raw)))
+              (let ((url (replace-regexp-in-string "\\`eww:" "" raw)))
+                (require 'eww)
+                (eww-browse-url url)
+                (delete-other-windows))
+            (let ((cmd (key-binding (kbd "C-u C-c C-o C-x 1"))))
+              (if (commandp cmd)
+                  (call-interactively cmd)
+                (execute-kbd-macro (kbd "C-u C-c C-o C-x 1")))))))
 
-   ((derived-mode-p 'eww-mode)
-    (let ((url (or (and (fboundp 'eww-link-at-point) (eww-link-at-point))
-                   (get-text-property (point) 'shr-url)
-                   (thing-at-point 'url))))
-      (if url
-          (progn
-            (require 'eww)
-            (eww-browse-url (string-trim url))
-            (delete-other-windows)))))
+       ((derived-mode-p 'eww-mode)
+        (let ((url (or (and (fboundp 'eww-link-at-point) (eww-link-at-point))
+                       (get-text-property (point) 'shr-url)
+                       (thing-at-point 'url))))
+          (if url
+              (progn
+                (require 'eww)
+                (eww-browse-url (string-trim url))
+                (delete-other-windows))
+            (error "No link at point"))))
 
-   ((derived-mode-p 'prog-mode)
-    (let ((sym (thing-at-point 'symbol t)))
-      (if (not sym)
-          (message "No symbol at point")
-        (let ((pattern (concat "^[a-zA-Z_][^;\n]*\\b"
-                               (regexp-quote sym)
-                               "\\b[^;\n]*("))
-              (origin (point)))
-          (goto-char (point-min))
-          (if (re-search-forward pattern nil t)
-              (beginning-of-line)
-            (goto-char origin)
-            (condition-case err
-                (xref-find-definitions sym)
-              (error (message "No definition found for '%s'" sym))))))))
+       ((derived-mode-p 'help-mode)
+        (push-button))
 
-   (t
-    (let ((url (thing-at-point 'url)))
-      (if url
-          (browse-url (string-trim url))
-        (let ((cmd (key-binding (kbd "C-u C-c C-o C-x 1"))))
-          (if (commandp cmd)
-              (call-interactively cmd)
-            (execute-kbd-macro (kbd "C-u C-c C-o C-x 1")))))))))
+       ((derived-mode-p 'prog-mode)
+        (let ((sym (thing-at-point 'symbol t)))
+          (if (not sym)
+              (message "No symbol at point")
+            (let ((pattern (concat "^[a-zA-Z_][^;\n]*\\b"
+                                   (regexp-quote sym)
+                                   "\\b[^;\n]*("))
+                  (origin (point)))
+              (goto-char (point-min))
+              (if (re-search-forward pattern nil t)
+                  (beginning-of-line)
+                (goto-char origin)
+                (condition-case err
+                    (xref-find-definitions sym)
+                  (error (message "No definition found for '%s'" sym))))))))
+
+       (t
+        (let ((url (thing-at-point 'url)))
+          (if url
+              (browse-url (string-trim url))
+            (let ((cmd (key-binding (kbd "C-u C-c C-o C-x 1"))))
+              (if (commandp cmd)
+                  (call-interactively cmd)
+                (execute-kbd-macro (kbd "C-u C-c C-o C-x 1"))))))))
+    (error (message "Not a suitable link"))))
 
 (defun nu/wrap-nav--on-last-line-p ()
   (save-excursion
@@ -438,9 +444,7 @@
     (define-key map (kbd "<up>")    #'nu/dashboard-nav-up)
     (define-key map (kbd "C-p")     #'nu/dashboard-nav-up)
     (define-key map (kbd "<right>") #'nu/dashboard-nav-right)
-    (define-key map (kbd "C-f")     #'nu/dashboard-nav-right)
     (define-key map (kbd "<left>")  #'nu/dashboard-nav-left)
-    (define-key map (kbd "C-b")     #'nu/dashboard-nav-left)
     map))
 
 (define-minor-mode nu/dashboard-nav-mode
@@ -461,9 +465,7 @@
     (define-key map (kbd "<up>")    #'nu/wrap-previous-line)
     (define-key map (kbd "C-p")     #'nu/wrap-previous-line)
     (define-key map (kbd "<right>") #'nu/wrap-forward-char)
-    (define-key map (kbd "C-f")     #'nu/wrap-forward-char)
     (define-key map (kbd "<left>")  #'nu/wrap-backward-char)
-    (define-key map (kbd "C-b")     #'nu/wrap-backward-char)
     map))
 
 (define-minor-mode nu/wrap-nav-mode
