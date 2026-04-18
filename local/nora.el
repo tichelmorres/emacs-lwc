@@ -4,11 +4,15 @@
 (defvar-local nora--authenticated nil)
 (defvar-local nora--password nil)
 
-(defconst nora--doas-path
+(defconst nora--priv-path
   (or (and (file-executable-p "/run/wrappers/bin/doas")
            "/run/wrappers/bin/doas")
       (executable-find "doas")
-      (error "NORA: cannot find doas")))
+      (executable-find "sudo")
+      (error "NORA: cannot find doas or sudo")))
+
+(defconst nora--priv-tool
+  (file-name-nondirectory nora--priv-path))
 
 (defconst nora--edit-commands
   '(
@@ -38,13 +42,13 @@
           (key (and (> (length vec) 0) (aref vec 0))))
      (and key (characterp key) (>= key 32)))))
 
-(defun nora--run-with-doas (password &rest args)
+(defun nora--run-with-priv (password &rest args)
   (let ((exit-code nil))
     (make-process
-     :name            "nora-doas"
-     :command         (cons nora--doas-path args)
+     :name            "nora-priv"
+     :command         (cons nora--priv-path args)
      :connection-type 'pty :noquery t :sentinel (lambda (proc _event)
-                        (setq exit-code (process-exit-status proc)))
+                                                  (setq exit-code (process-exit-status proc)))
      :filter          (lambda (proc output)
                         (when (string-match-p "[Pp]assword" output)
                           (process-send-string proc (concat password "\n")))))
@@ -53,9 +57,9 @@
     exit-code))
 
 (defun nora--verify-password (password)
-  (= 0 (nora--run-with-doas password "true")))
+  (= 0 (nora--run-with-priv password "true")))
 
-(defun nora--write-with-doas ()
+(defun nora--write-with-priv ()
   (let* ((filename buffer-file-name)
          (tmpfile  (make-temp-file "nora-save-"))
          (saved    nil))
@@ -63,10 +67,10 @@
         (condition-case err
             (progn
               (write-region nil nil tmpfile nil 'silent)
-              (let ((rc (nora--run-with-doas nora--password "cp" tmpfile filename)))
+              (let ((rc (nora--run-with-priv nora--password "cp" tmpfile filename)))
                 (if (= rc 0)
                     (setq saved t)
-                  (error "doas cp exited with code %d" rc))))
+                  (error "%s cp exited with code %d" nora--priv-tool rc))))
           (error
            (message "NORA: Save failed with error... %s" (error-message-string err))))
       (when (file-exists-p tmpfile)
@@ -90,11 +94,12 @@
           (setq buffer-read-only nil)
           (let ((inhibit-read-only t))
             (put-text-property (point-min) (point-max) 'read-only nil))
+          (set-buffer-modified-p nil)
           (when (bound-and-true-p view-mode)
             (view-mode -1))
-          (add-hook 'write-contents-functions #'nora--write-with-doas nil t)
+          (add-hook 'write-contents-functions #'nora--write-with-priv nil t)
           (remove-hook 'pre-command-hook #'nora--pre-command-hook t)
-          (message "NORA: Authenticated!"))
+          (message "NORA: Authenticated! (via %s)" nora--priv-tool))
       (message "NORA: Wrong password"))))
 
 (defun nora--pre-command-hook ()
