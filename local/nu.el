@@ -509,6 +509,30 @@
             (activate-mark))
         (message "No symbol at point")))))
 
+(defun nu/mc-mark-next ()
+  (interactive)
+  (unless (use-region-p)
+    (let ((bounds (bounds-of-thing-at-point 'symbol)))
+      (if bounds
+          (progn (goto-char (cdr bounds))
+                 (set-mark  (car bounds))
+                 (activate-mark))
+        (message "No symbol at point"))))
+  (when (use-region-p)
+    (mc/mark-next-like-this 1)))
+
+(defun nu/mc-mark-previous ()
+  (interactive)
+  (unless (use-region-p)
+    (let ((bounds (bounds-of-thing-at-point 'symbol)))
+      (if bounds
+          (progn (goto-char (cdr bounds))
+                 (set-mark  (car bounds))
+                 (activate-mark))
+        (message "No symbol at point"))))
+  (when (use-region-p)
+    (mc/mark-previous-like-this 1)))
+
 (defun nu/select-all-occurrences ()
   (interactive)
   (unless (use-region-p)

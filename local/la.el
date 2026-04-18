@@ -31,7 +31,7 @@
               (zath-alive   (and zath-proc (process-live-p zath-proc))))
          (cond
           ((not pdf-exists)
-           (message "Compilation failed — no PDF produced. See *latex-compile* for details."))
+           (message "Compilation failed. See *latex-compile* for details."))
           (zath-alive
            (message "Recompiled successfully: %s." pdf-file))
           (t

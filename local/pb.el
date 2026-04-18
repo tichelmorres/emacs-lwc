@@ -72,6 +72,10 @@ println(\"Hello, world!\")
 (defun pb/find-runner (runners)
   (cl-find-if #'executable-find runners))
 
+(defun pb/can-run-p (config)
+  (or (pb/find-runner   (plist-get config :runner))
+      (pb/find-compiler (plist-get config :compilers))))
+
 (defun pb/probe-name (lang)
   (format "*probe-%s*" (symbol-name lang)))
 
@@ -136,21 +140,23 @@ println(\"Hello, world!\")
     (cons buf freshp)))
 
 (defun pb/send-to-shell (shell-buf command)
-  "Send COMMAND (a string, without trailing newline) to SHELL-BUF."
   (if pb/use-vterm
       (with-current-buffer shell-buf
         (vterm-send-string (concat command "\n")))
-    (comint-send-string (get-buffer-process shell-buf)
-                        (concat command "\n"))))
+    (with-current-buffer shell-buf
+      (comint-send-string (get-buffer-process shell-buf)
+                          (concat command "\n"))
+      (comint-add-to-input-history command))))
 
 (defun pb/display (probe-buf shell-buf)
   (delete-other-windows)
   (switch-to-buffer probe-buf)
-  (let* ((total     (window-height))
-         (top-lines (floor (* 0.70 total)))
-         (bot-win   (split-window-below top-lines)))
-    (set-window-buffer bot-win shell-buf)
-    (select-window (get-buffer-window probe-buf))))
+  (when shell-buf
+    (let* ((total     (window-height))
+           (top-lines (floor (* 0.70 total)))
+           (bot-win   (split-window-below top-lines)))
+      (set-window-buffer bot-win shell-buf)
+      (select-window (get-buffer-window probe-buf)))))
 
 (defun pb/session-exists-p (lang)
   (let ((config (alist-get lang pb/language-config)))
@@ -178,6 +184,8 @@ println(\"Hello, world!\")
          (config (alist-get lang pb/language-config))
          (_      (unless config
                    (user-error "pb: no config for language '%s'" lang)))
+         (_      (unless (pb/can-run-p config)
+                   (user-error "pb: no runner or compiler found for '%s'" lang)))
          (shell  (pb/ensure-shell lang))
          (sh-buf (car shell)))
     (write-region (buffer-string) nil (pb/src-file lang config))
@@ -219,9 +227,10 @@ println(\"Hello, world!\")
          (mode    (plist-get config :mode))
          (tmpl    (plist-get config :template))
          (p-buf   (get-buffer-create (pb/probe-name lang)))
-         (shell   (pb/ensure-shell lang))
-         (sh-buf  (car shell))
-         (freshp  (cdr shell)))
+         (can-run (pb/can-run-p config))
+         (shell   (when can-run (pb/ensure-shell lang)))
+         (sh-buf  (when shell (car shell)))
+         (freshp  (when shell (cdr shell))))
 
     (with-current-buffer p-buf
       (when (zerop (buffer-size))

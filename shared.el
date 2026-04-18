@@ -148,7 +148,9 @@
 (rc/require 'visual-fill-column)
 (setq visual-fill-column-center-text t)
 
-;; Better ls for dired
+;; Dired config
+(setq wdired-allow-to-change-permissions t)
+
 (require 'ls-lisp)
 (require 'dired-x)
 (setq ls-lisp-use-insert-directory-program nil)
@@ -167,7 +169,9 @@
 (add-hook 'dired-mode-hook #'nu/wrap-nav-mode)
 
 (with-eval-after-load 'dired
-  (define-key dired-mode-map (kbd "C-l") #'dired-find-file)
+  (define-key dired-mode-map (kbd "C-l")       #'dired-find-file)
+  (define-key dired-mode-map (kbd "M-<left>")  #'dired-up-directory)
+  (define-key dired-mode-map (kbd "M-<right>") #'dired-find-file)
   (define-key dired-mode-map (kbd "C-<down>")
     (lambda () (interactive "^")
       (forward-line 5)
@@ -185,7 +189,7 @@
           ((string= ext  "tex")        2)
           ((string= ext  "pdf")        3)
           ((member  ext  nu/lualatex)  4)
-          ;; ← other files and dirs come here
+          ;; <- other files and dirs come here
           ((string= base ".git")       6)
           ((string= base ".gitignore") 7)
           (t                           5))))
@@ -252,6 +256,14 @@
   (define-key eww-mode-map (kbd "M-<left>")  #'eww-back-url)
   (define-key eww-mode-map (kbd "M-<right>") #'eww-forward-url))
 
+;; M-left opens dired at the current file's directory
+;; M-right should be unbinded
+(global-set-key (kbd "M-<left>") #'dired-jump)
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "M-<left>")  #'dired-jump)
+  (define-key org-mode-map (kbd "M-<right>") nil))
+(global-unset-key (kbd "M-<right>"))
+
 ;; Make ESC act like a universal quit
 (global-set-key [escape] #'keyboard-escape-quit)
 
@@ -317,12 +329,8 @@
 ;; Multiple cursors
 (rc/require 'multiple-cursors)
 
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->")         'mc/mark-next-like-this)
-(global-set-key (kbd "C-<")         'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<")     'mc/mark-all-like-this)
-(global-set-key (kbd "C-\"")        'mc/skip-to-next-like-this)
-(global-set-key (kbd "C-:")         'mc/skip-to-previous-like-this)
+(global-set-key (kbd "C->") 'nu/mc-mark-next)
+(global-set-key (kbd "C-<") 'nu/mc-mark-previous)
 
 ;; M-d => add cursor at next match occurrence of selection
 ;; M-l => select all occurrences of current selection
