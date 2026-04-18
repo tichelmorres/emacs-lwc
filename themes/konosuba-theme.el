@@ -334,15 +334,25 @@
    `(tab-bar-tab          ((t (:background  unspecified        :foreground ,konosuba-red :weight bold))))
    `(tab-bar-tab-inactive ((t (:background  unspecified                                              ))))
 
-   ;; Vterm / Ansi-term
+   ;; Term / Ansi-term
    `(term-color-black   ((t (:foreground ,konosuba-light-brown :background ,konosuba-light-gray ))))
    `(term-color-red     ((t (:foreground ,konosuba-red         :background ,konosuba-green      ))))
    `(term-color-green   ((t (:foreground ,konosuba-green       :background ,konosuba-yellow     ))))
-   `(term-color-blue    ((t (:foreground ,konosuba-blue        :background ,konosuba-blue       ))))
    `(term-color-yellow  ((t (:foreground ,konosuba-yellow      :background ,konosuba-red        ))))
+   `(term-color-blue    ((t (:foreground ,konosuba-blue        :background ,konosuba-blue       ))))
    `(term-color-magenta ((t (:foreground ,konosuba-magenta     :background ,konosuba-magenta    ))))
    `(term-color-cyan    ((t (:foreground ,konosuba-cyan        :background ,konosuba-cyan       ))))
    `(term-color-white   ((t (:foreground ,konosuba-foreground  :background ,konosuba-light-white))))
+
+   ;; Vterm
+   `(vterm-color-black   ((t (:foreground ,konosuba-light-brown  :background ,konosuba-light-gray ))))
+   `(vterm-color-red     ((t (:foreground ,konosuba-red          :background ,konosuba-red        ))))
+   `(vterm-color-green   ((t (:foreground ,konosuba-green        :background ,konosuba-green      ))))
+   `(vterm-color-yellow  ((t (:foreground ,konosuba-yellow       :background ,konosuba-yellow     ))))
+   `(vterm-color-blue    ((t (:foreground ,konosuba-blue         :background ,konosuba-blue       ))))
+   `(vterm-color-magenta ((t (:foreground ,konosuba-magenta      :background ,konosuba-magenta    ))))
+   `(vterm-color-cyan    ((t (:foreground ,konosuba-cyan         :background ,konosuba-cyan       ))))
+   `(vterm-color-white   ((t (:foreground ,konosuba-light-white  :background ,konosuba-light-white))))
 
    ;; Company-mode
    `(company-tooltip                      ((t (:foreground ,konosuba-foreground :background ,konosuba-dark-gray ))))
