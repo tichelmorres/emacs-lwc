@@ -339,8 +339,15 @@
       (end-of-line)
     (backward-char)))
 
-(defconst nu/dashboard-nav-start-line 17)
-(defconst nu/dashboard-nav-end-line   21)
+(defvar nu/dashboard-nav-start-line nil
+  "First line of the navigable region in the dashboard file.
+Set this in the per-OS config file (e.g. nixos.el) before the
+dashboard buffer is opened.")
+
+(defvar nu/dashboard-nav-end-line nil
+  "Last line of the navigable region in the dashboard file.
+Set this in the per-OS config file (e.g. nixos.el) before the
+dashboard buffer is opened.")
 
 (defvar-local nu/dashboard-nav--items nil)
 
@@ -638,3 +645,19 @@
       (error nil))
     (when (/= (point) saved)
       (move-beginning-of-line 1))))
+
+(defvar nu/vterm-free-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<up>")    #'previous-line)
+    (define-key map (kbd "<down>")  #'next-line)
+    (define-key map (kbd "<left>")  #'backward-char)
+    (define-key map (kbd "<right>") #'forward-char)
+    (define-key map (kbd "C-f")     #'nu/vterm-free-mode)
+    map))
+
+(define-minor-mode nu/vterm-free-mode
+  "Free cursor navigation inside the vterm buffer."
+  :keymap nu/vterm-free-mode-map
+  (message (if nu/vterm-free-mode
+               "vterm: free mode ON"
+               "vterm: free mode OFF")))

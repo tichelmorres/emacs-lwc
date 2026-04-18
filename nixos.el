@@ -27,6 +27,8 @@
 ;; | --------------------------------------------
 
 (setq nu/dash-file (lwc/config-path "dash-nixos.org"))
+(setq nu/dashboard-nav-start-line 15)
+(setq nu/dashboard-nav-end-line   19)
 (prefer-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font Mono-20"))

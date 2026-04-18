@@ -71,11 +71,22 @@
             )
           t)
 
-;; Disable line numbers and truncate big lines on MD
+;; Disable line numbers and truncate big lines on MD and remap
+;; every markdown face that may inherit a different font to the
+;; default face's family, so all markdown content uses the same
+;; font face
 (add-hook 'markdown-mode-hook
           (lambda ()
             (display-line-numbers-mode 0)
-            (visual-line-mode t))
+            (visual-line-mode t)
+            (let ((family (face-attribute 'default :family)))
+              (when (stringp family)
+                (dolist (face '(markdown-pre-face
+                                markdown-code-face
+                                markdown-inline-code-face
+                                markdown-table-face))
+                  (when (facep face)
+                    (face-remap-add-relative face :family family))))))
           t)
 
 ;; Wayland wl-copy support for emacs -nw
@@ -185,6 +196,7 @@
   (define-key dired-mode-map (kbd "C-l")       #'dired-find-file)
   (define-key dired-mode-map (kbd "M-<left>")  #'dired-up-directory)
   (define-key dired-mode-map (kbd "M-<right>") #'dired-find-file)
+  (define-key dired-mode-map (kbd "C-w")       #'dired-toggle-read-only)
   (define-key dired-mode-map (kbd "C-<down>")
     (lambda () (interactive "^")
       (forward-line 5)
@@ -198,6 +210,10 @@
       (if (eq (char-after (line-beginning-position)) dired-del-marker)
           (dired-unmark 1)
         (dired-flag-file-deletion 1)))))
+
+;; C-w inside wdired saves changes and returns to plain dired
+(with-eval-after-load 'wdired
+  (define-key wdired-mode-map (kbd "C-w") #'wdired-finish-edit))
 
 (defun nu/dired-extension-priority (filename)
   (let* ((base (directory-file-name (file-name-nondirectory filename)))
@@ -319,6 +335,12 @@
 ;; C-j => open vterm (fish shell)
 (global-set-key (kbd "C-j") #'vterm)
 
+;; C-f toggles free-cursor mode; C-f again exits
+;; C-j switches to the previous buffer
+(with-eval-after-load 'vterm
+  (define-key vterm-mode-map (kbd "C-f") #'nu/vterm-free-mode)
+  (define-key vterm-mode-map (kbd "C-j") #'previous-buffer))
+
 ;; Dedent by one tab
 (global-set-key (kbd "<backtab>") #'nu/dedent-rigidly)
 
@@ -332,8 +354,9 @@
 ;; Duplicate line
 (global-set-key (kbd "C-,") 'rc/duplicate-line)
 
-;; Open LaTeX as PDF
-(global-set-key (kbd "C-c p p") #'la/latex-compile-and-open)
+;; Open LaTeX or Markdown as PDF via Zathura
+(unless (eq system-type 'windows-nt)
+  (global-set-key (kbd "C-c p p") #'zt/compile-and-open))
 
 ;; Open GAMES buffer
 (global-set-key (kbd "C-c g") #'nu/open-games-buffer)
