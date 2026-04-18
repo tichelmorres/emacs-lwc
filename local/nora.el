@@ -1,4 +1,4 @@
-;;; nora.el --- NO Root Authentication -*- lexical-binding: t; -*-
+;;; -*- lexical-binding: t; -*-
 
 (defvar-local nora--needs-auth nil)
 (defvar-local nora--authenticated nil)

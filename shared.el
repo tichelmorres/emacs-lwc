@@ -139,9 +139,22 @@
 ;; Disable splash screen and welcome message
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-message t)
+(setq initial-scratch-message nil)
 
 (defun display-startup-echo-area-message ()
   (message ""))
+
+;; Scratch buffer should only have markdown, visual-line and whitespace modes
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (with-current-buffer (get-buffer-create "*scratch*")
+              (erase-buffer)
+              (markdown-mode)
+              (visual-line-mode 1)
+              (whitespace-mode 1)
+              (auto-fill-mode -1)
+              (eldoc-mode -1)))
+          t)
 
 ;; Use custom start page (read-only)
 (setq initial-buffer-choice nu/dash-file)
@@ -265,7 +278,7 @@
 (global-unset-key (kbd "M-<right>"))
 
 ;; Make ESC act like a universal quit
-(global-set-key [escape] #'keyboard-escape-quit)
+(global-set-key [escape]  #'keyboard-escape-quit)
 
 ;; C-p => select current line, cursor at end of line
 (global-set-key (kbd "C-p") #'nu/select-line)
@@ -375,10 +388,14 @@
 (require 'markdown-mode)
 (add-to-list 'auto-mode-alist '("\\.m\\(d\\|arkdown\\)\\'" . markdown-mode))
 
-;; Rust
+;; Rust / RON
 (rc/require 'rust-mode)
 (require 'rust-mode)
 (add-to-list 'auto-mode-alist '("\\.r\\(s\\|lib\\)\\'" . rust-mode))
+
+(rc/require 'ron-mode)
+(require 'ron-mode)
+(add-to-list 'auto-mode-alist '("\\.ron\\'" . ron-mode))
 
 ;; Haskell
 (rc/require 'haskell-mode)
