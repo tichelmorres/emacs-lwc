@@ -171,17 +171,17 @@
 
 (defvar nu/lualatex '("aux" "log" "out"))
 
-;; Hide lualatex build artefacts only.
+;; Hide lualatex build artefacts!
 ;; The default dired-omit-files also matches "." and "..", so we
 ;; replace it with just the auto-save/lock-file pattern to keep
-;; those two entries visible.  Comment the three lines below to
-;; show artefacts again.
+;; those two entries visible
 (setq dired-omit-files "^\\.?#")
 (setq dired-omit-extensions nu/lualatex)
 (add-hook 'dired-mode-hook #'dired-omit-mode)
 (add-hook 'dired-mode-hook #'nu/wrap-nav-mode)
 
 (with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "C-f")       #'isearch-forward)
   (define-key dired-mode-map (kbd "C-l")       #'dired-find-file)
   (define-key dired-mode-map (kbd "M-<left>")  #'dired-up-directory)
   (define-key dired-mode-map (kbd "M-<right>") #'dired-find-file)
@@ -192,7 +192,12 @@
   (define-key dired-mode-map (kbd "C-<up>")
     (lambda () (interactive "^")
       (forward-line -5)
-      (ignore-errors (dired-move-to-filename)))))
+      (ignore-errors (dired-move-to-filename))))
+  (define-key dired-mode-map (kbd "d")
+    (lambda () (interactive)
+      (if (eq (char-after (line-beginning-position)) dired-del-marker)
+          (dired-unmark 1)
+        (dired-flag-file-deletion 1)))))
 
 (defun nu/dired-extension-priority (filename)
   (let* ((base (directory-file-name (file-name-nondirectory filename)))
@@ -237,9 +242,9 @@
 
 ;; C-z => undo  /  C-y => redo
 ;; Both deactivate any active selection first so they always operate
-;; on the whole buffer (CUA would otherwise scope C-z to the region).
+;; on the whole buffer (CUA would otherwise scope C-z to the region);
 ;; global-set-key alone is not enough for C-z because CUA registers it
-;; in its own higher-priority keymap; we must override it there directly.
+;; in its own higher-priority keymap; we must override it there directly
 (global-set-key (kbd "C-z") #'nu/undo)
 (global-set-key (kbd "C-y") #'nu/undo-redo)
 (with-eval-after-load 'cua-base

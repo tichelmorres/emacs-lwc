@@ -97,8 +97,9 @@
    `(diff-added   ((t ,(list :foreground konosuba-yellow  :background 'unspecified))))
 
    ;; Dired
-   `(dired-directory ((t  (     :foreground ,konosuba-blue  :weight   bold       ))))
-   `(dired-ignored   ((t ,(list :foreground  konosuba-green :inherit 'unspecified))))
+   `(dired-directory      ((t  (     :foreground ,konosuba-blue   :weight      bold                      ))))
+   `(dired-ignored        ((t ,(list :foreground  konosuba-green  :inherit    'unspecified               ))))
+   `(dired-broken-symlink ((t ,(list :foreground  konosuba-yellow :background  konosuba-red :weight 'bold))))
 
    ;; Ebrowse
    `(ebrowse-root-class ((t (:foreground ,konosuba-blue :weight bold))))
