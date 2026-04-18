@@ -181,7 +181,6 @@
 (add-hook 'dired-mode-hook #'nu/wrap-nav-mode)
 
 (with-eval-after-load 'dired
-  (define-key dired-mode-map (kbd "C-b")       nil)
   (define-key dired-mode-map (kbd "C-f")       #'isearch-forward)
   (define-key dired-mode-map (kbd "C-l")       #'dired-find-file)
   (define-key dired-mode-map (kbd "M-<left>")  #'dired-up-directory)
@@ -280,7 +279,8 @@
 (global-set-key (kbd "M-<left>") #'dired-jump)
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "M-<left>")  #'dired-jump)
-  (define-key org-mode-map (kbd "M-<right>") nil))
+  (define-key org-mode-map (kbd "M-<right>") nil)
+  (define-key org-mode-map (kbd "C-j")       #'vterm))
 (global-unset-key (kbd "M-<right>"))
 
 ;; Make ESC act like a universal quit
@@ -315,6 +315,9 @@
 (rc/require 'dumb-jump)
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 (global-set-key (kbd "C-l") #'nu/goto-link-source)
+
+;; C-j => open vterm (fish shell)
+(global-set-key (kbd "C-j") #'vterm)
 
 ;; Dedent by one tab
 (global-set-key (kbd "<backtab>") #'nu/dedent-rigidly)
