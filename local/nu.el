@@ -1,3 +1,7 @@
+(defgroup nu nil
+  "Utilities to improve Emacs' UX based on personal tastes."
+  :group 'tools)
+
 (require 'dired)
 (defun nu/keep-region-active-after-copy (&rest _args)
   (when (use-region-p)

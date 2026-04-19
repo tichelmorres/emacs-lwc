@@ -8,6 +8,8 @@
         markdown-outdent-or-delete
         nu/backward-delete-word
         nu/indent-more-rigidly
+        nu/left-or-region-begin
+        nu/right-or-region-end
         ))
 
 (setq mc/cmds-to-run-once

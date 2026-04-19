@@ -1,3 +1,7 @@
+(defgroup rc nil
+  "Utilities gotten from external Elisp config files."
+  :group 'tools)
+
 (defvar rc/package-contents-refreshed nil)
 
 (defun rc/package-refresh-contents-once ()
