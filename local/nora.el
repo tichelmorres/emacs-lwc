@@ -14,34 +14,6 @@
 (defconst nora--priv-tool
   (file-name-nondirectory nora--priv-path))
 
-(defconst nora--edit-commands
-  '(
-    self-insert-command
-    newline newline-and-indent open-line
-    delete-char delete-backward-char backward-delete-char-untabify
-    kill-word backward-kill-word
-    kill-line kill-region
-    yank yank-pop
-    transpose-chars transpose-words transpose-lines
-    upcase-word downcase-word capitalize-word
-    upcase-region downcase-region
-    indent-for-tab-command delete-indentation just-one-space
-    fill-paragraph
-    replace-string replace-regexp query-replace query-replace-regexp
-    nu/backward-delete-word
-    nu/move-text-up nu/move-text-down
-    nu/indent-more-rigidly nu/dedent-rigidly
-    nu/toggle-comment
-    rc/duplicate-line
-    ))
-
-(defun nora--edit-intent-p ()
-  (or
-   (memq this-command nora--edit-commands)
-   (let* ((vec (this-command-keys-vector))
-          (key (and (> (length vec) 0) (aref vec 0))))
-     (and key (characterp key) (>= key 32)))))
-
 (defun nora--run-with-priv (password &rest args)
   (let ((exit-code nil))
     (make-process
@@ -82,8 +54,13 @@
       (message "NORA: Save failed"))
     t))
 
-(defun nora--authenticate ()
-  (let* ((prompt   (format "NORA: password for %s is... "
+(defun nora-authenticate ()
+  (interactive)
+  (unless nora--needs-auth
+    (user-error "NORA: This buffer does not require authentication"))
+  (when nora--authenticated
+    (user-error "NORA: Already authenticated"))
+  (let* ((prompt   (format "NORA: Password for %s is... "
                            (abbreviate-file-name buffer-file-name)))
          (password (read-passwd prompt))
          (ok       (nora--verify-password password)))
@@ -98,19 +75,30 @@
           (when (bound-and-true-p view-mode)
             (view-mode -1))
           (add-hook 'write-contents-functions #'nora--write-with-priv nil t)
-          (remove-hook 'pre-command-hook #'nora--pre-command-hook t)
+          (nora-mode -1)
           (message "NORA: Authenticated! (via %s)" nora--priv-tool))
       (message "NORA: Wrong password"))))
 
-(defun nora--pre-command-hook ()
-  (when (and (not nora--authenticated)
-             (nora--edit-intent-p))
-    (setq this-command 'ignore)
-    (let ((buf (current-buffer)))
-      (run-at-time 0 nil (lambda ()
-                           (when (buffer-live-p buf)
-                             (with-current-buffer buf
-                               (nora--authenticate))))))))
+(defun nora--command-error-function (data context caller)
+  (if (and (eq (car data) 'buffer-read-only)
+           (bound-and-true-p nora-mode))
+      (message "NORA: Buffer is read-only. Press %s to authenticate"
+               (substitute-command-keys "\\[nora-authenticate]"))
+    (command-error-default-function data context caller)))
+
+(setq command-error-function #'nora--command-error-function)
+
+(defvar nora-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-n") #'nora-authenticate)
+    map))
+
+(define-minor-mode nora-mode
+  "Indicate that this buffer needs privilege escalation before editing.
+While active, \\[nora-authenticate] prompts for a password and unlocks
+the buffer for writing via `doas'/`sudo'."
+  :keymap nora-mode-map
+  :lighter " NORA")
 
 (defun nora--file-needs-root-p (filename)
   (and filename
@@ -120,8 +108,9 @@
 (defun nora--find-file-hook ()
   (when (nora--file-needs-root-p buffer-file-name)
     (setq-local nora--needs-auth t)
-    (add-hook 'pre-command-hook #'nora--pre-command-hook nil t)
-    (message "NORA: This buffer is read-only, press any edit key to authenticate")))
+    (nora-mode 1)
+    (message "NORA: Press %s to authenticate"
+             (substitute-command-keys "\\[nora-authenticate]"))))
 
 (unless (eq system-type 'windows-nt)
   (add-hook 'find-file-hook #'nora--find-file-hook))
