@@ -272,6 +272,14 @@
 (global-set-key (kbd "M-<up>")  'nu/move-text-up)
 (global-set-key (kbd "M-<down>") 'nu/move-text-down)
 
+;; Arrow keys with an active selection:
+;;   Left  : collapse to region start
+;;   Right : collapse to region end
+;;   Up    : collapse to region start, then move up one line
+;;   Down  : collapse to region end,   then move down one line
+(global-set-key (kbd "<left>")  #'nu/left-or-region-begin)
+(global-set-key (kbd "<right>") #'nu/right-or-region-end)
+
 ;; C-+ => larger window
 ;; C-- => smaller window
 (global-set-key (kbd "C-+")  #'nu/text-scale-increase)

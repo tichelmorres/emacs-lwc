@@ -12,9 +12,11 @@
 
 (setq mc/cmds-to-run-once
       '(
+        ignore
         la/latex-compile-and-open
         nu/mc-mark-next
         nu/mc-mark-previous
+        nu/mwheel-snap
         nu/select-all-occurrences
         nu/select-word-or-next
         nu/undo

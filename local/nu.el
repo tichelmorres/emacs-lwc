@@ -31,10 +31,47 @@
     nu/wrap-next-line      nu/wrap-previous-line
     nu/wrap-forward-char   nu/wrap-backward-char))
 
+(defconst nu/backward-arrow-commands
+  '(previous-line)
+  "Arrow commands that collapse an active selection to region-beginning.")
+
+(defconst nu/forward-arrow-commands
+  '(next-line)
+  "Arrow commands that collapse an active selection to region-end.")
+
+(defun nu/left-or-region-begin ()
+  "With an active region, jump to its beginning and deactivate it.
+Without a region, move left one character as usual."
+  (interactive)
+  (if (and (use-region-p) (not this-command-keys-shift-translated))
+      (progn
+        (goto-char (region-beginning))
+        (deactivate-mark)
+        (when (boundp 'cua--last-region-shifted)
+          (setq cua--last-region-shifted nil)))
+    (left-char)))
+
+(defun nu/right-or-region-end ()
+  "With an active region, jump to its end and deactivate it.
+Without a region, move right one character as usual."
+  (interactive)
+  (if (and (use-region-p) (not this-command-keys-shift-translated))
+      (progn
+        (goto-char (region-end))
+        (deactivate-mark)
+        (when (boundp 'cua--last-region-shifted)
+          (setq cua--last-region-shifted nil)))
+    (right-char)))
+
 (defun nu/pre-command-deselect-on-move ()
   (when (and (use-region-p)
              (memq this-command nu/movement-commands)
              (not this-command-keys-shift-translated))
+    (cond
+     ((memq this-command nu/backward-arrow-commands)
+      (goto-char (region-beginning)))
+     ((memq this-command nu/forward-arrow-commands)
+      (goto-char (region-end))))
     (deactivate-mark)
     (when (boundp 'cua--last-region-shifted)
       (setq cua--last-region-shifted nil))))
