@@ -5,6 +5,7 @@
       '(
         cua-paste
         keyboard-escape-quit
+        markdown-outdent-or-delete
         nu/backward-delete-word
         nu/indent-more-rigidly
         ))

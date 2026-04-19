@@ -424,13 +424,6 @@
 (require 'markdown-mode)
 (add-to-list 'auto-mode-alist '("\\.m\\(d\\|arkdown\\)\\'" . markdown-mode))
 
-(with-eval-after-load 'markdown-mode
-  (define-key markdown-mode-map (kbd "DEL")
-    (lambda () (interactive)
-      (if (markdown-code-block-at-point-p)
-          (delete-backward-char 1)
-        (markdown-outdent-or-delete)))))
-
 ;; Rust / RON
 (rc/require 'rust-mode)
 (require 'rust-mode)
