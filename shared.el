@@ -173,6 +173,7 @@
 (setq visual-fill-column-center-text t)
 
 ;; Dired config
+(setq dired-kill-when-opening-new-dired-buffer t)
 (setq wdired-allow-to-change-permissions t)
 
 (require 'ls-lisp)
@@ -338,8 +339,11 @@
 ;; C-f toggles free-cursor mode; C-f again exits
 ;; C-j switches to the previous buffer
 (with-eval-after-load 'vterm
-  (define-key vterm-mode-map (kbd "C-f") #'nu/vterm-free-mode)
-  (define-key vterm-mode-map (kbd "C-j") #'previous-buffer))
+  (define-key vterm-mode-map (kbd "C-f")   #'nu/vterm-free-mode)
+  (define-key vterm-mode-map (kbd "C-j")   #'previous-buffer)
+  (define-key vterm-mode-map (kbd "C-v")   #'vterm-yank)
+  (define-key vterm-mode-map (kbd "C-S-v") #'vterm-yank)
+  (define-key vterm-mode-map (kbd "C-z")   #'vterm-undo))
 
 ;; Dedent by one tab
 (global-set-key (kbd "<backtab>") #'nu/dedent-rigidly)
@@ -419,6 +423,13 @@
 (rc/require 'markdown-mode)
 (require 'markdown-mode)
 (add-to-list 'auto-mode-alist '("\\.m\\(d\\|arkdown\\)\\'" . markdown-mode))
+
+(with-eval-after-load 'markdown-mode
+  (define-key markdown-mode-map (kbd "DEL")
+    (lambda () (interactive)
+      (if (markdown-code-block-at-point-p)
+          (delete-backward-char 1)
+        (markdown-outdent-or-delete)))))
 
 ;; Rust / RON
 (rc/require 'rust-mode)
