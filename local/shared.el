@@ -110,8 +110,8 @@
 ;; (and disable it in some cases)
 (global-display-line-numbers-mode t)
 
-(add-hook 'org-mode-hook      (lambda () (display-line-numbers-mode 0)))
-(add-hook 'gfm-mode-hook      (lambda () (display-line-numbers-mode 0)))
+(add-hook 'org-mode-hook (lambda () (display-line-numbers-mode 0)))
+(add-hook 'gfm-mode-hook (lambda () (display-line-numbers-mode 0)))
 
 ;; Set min number line width to 4 characters
 (setq-default display-line-numbers-width 4)
@@ -210,7 +210,12 @@
     (lambda () (interactive)
       (if (eq (char-after (line-beginning-position)) dired-del-marker)
           (dired-unmark 1)
-        (dired-flag-file-deletion 1)))))
+        (dired-flag-file-deletion 1))))
+  (define-key dired-mode-map (kbd "m")
+    (lambda () (interactive)
+      (if (eq (char-after (line-beginning-position)) dired-marker-char)
+          (dired-unmark 1)
+        (dired-mark 1)))))
 
 ;; C-w inside wdired saves changes and returns to plain dired
 (with-eval-after-load 'wdired
