@@ -72,19 +72,19 @@
              (puthash pdf-file new-proc zt/pdf-viewer-processes)))))))))
 
 (defcustom zt/markdown-css
-  (expand-file-name "~/.config/emacs/local/github-markdown.css")
+  (expand-file-name "~/.config/emacs/local/render/github-markdown.css")
   "Path to the Markdown CSS file."
   :type 'file
   :group 'zt)
 
 (defcustom zt/markdown-template
-  (expand-file-name "~/.config/emacs/local/github-markdown-template.html")
+  (expand-file-name "~/.config/emacs/local/render/github-markdown-template.html")
   "Path to the pandoc HTML template for Markdown rendering."
   :type 'file
   :group 'zt)
 
 (defcustom zt/markdown-highlight-theme
-  (expand-file-name "~/.config/emacs/local/github-dark.theme")
+  (expand-file-name "~/.config/emacs/local/render/github-dark.theme")
   "Path to a pandoc Skylighting JSON theme file for syntax highlighting."
   :type 'file
   :group 'zt)

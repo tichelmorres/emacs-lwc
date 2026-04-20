@@ -703,6 +703,21 @@
       (delete-region (car r) (cdr r)))
     (message "Comments removed.")))
 
+(defun nu/expand-tabs-to-spaces ()
+  (interactive)
+  (let ((inhibit-read-only t)
+        (count 0))
+    (save-excursion
+      (goto-char (point-min))
+      (while (search-forward "\t" nil t)
+        (let* ((col    (save-excursion
+                         (goto-char (match-beginning 0))
+                         (current-column)))
+               (spaces (- tab-width (mod col tab-width))))
+          (replace-match (make-string spaces ?\s) t t)
+          (setq count (1+ count)))))
+    (message "%d tab(s) expanded to spaces." count)))
+
 (defun nu/man-pages-from-manpath ()
   (let (pages)
     (dolist (dir (split-string (or (getenv "MANPATH") "") ":" t))

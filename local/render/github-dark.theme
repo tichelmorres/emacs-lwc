@@ -1,6 +1,6 @@
 {
     "text-color": "#f0f6fc",
-    "background-color": "#161b22",
+    "background-color": "#0d1117",
     "line-number-color": "#6e7681",
     "line-number-background-color": null,
     "text-styles": {
@@ -25,14 +25,14 @@
         "Information":   { "text-color": "#9198a1" },
         "Keyword":       { "text-color": "#ff7b72" },
         "Normal":        { "text-color": "#f0f6fc" },
-        "Operator":      { "text-color": "#ff7b72" },
+        "Operator":      { "text-color": "#f0f6fc" },
         "Other":         { "text-color": "#f0f6fc" },
         "Preprocessor":  { "text-color": "#ff7b72" },
         "RegionMarker":  { "text-color": "#9198a1", "italic": true },
         "SpecialChar":   { "text-color": "#a5d6ff" },
         "SpecialString": { "text-color": "#a5d6ff" },
         "String":        { "text-color": "#a5d6ff" },
-        "Variable":      { "text-color": "#ffa657" },
+        "Variable":      { "text-color": "#f0f6fc" },
         "VerbatimString":{ "text-color": "#a5d6ff" },
         "Warning":       { "text-color": "#d29922" }
     }
