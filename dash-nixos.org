@@ -13,8 +13,8 @@
 —————————————————————————————————
 
 [[file:~/TeX/][TeX]]
-[[file:~/Projects/glyph-prompt/][Glyph Prompt]]
 [[elisp:(find-file-other-frame "~/Projects/ADS/incc")][Incc]]
+[[file:~/Projects/probe/grass][grass]]
 [[file:~/.config/emacs/init.el][init.el]]
 [[file:~/Manuscripts/Debalde/dorm.md][dorm.md]]
 

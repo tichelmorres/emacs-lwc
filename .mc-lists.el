@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         cua-paste
+        forward-sexp
         keyboard-escape-quit
         markdown-outdent-or-delete
         nu/backward-delete-word

@@ -275,10 +275,14 @@
 ;; Arrow keys with an active selection:
 ;;   Left  : collapse to region start
 ;;   Right : collapse to region end
-;;   Up    : collapse to region start, then move up one line
-;;   Down  : collapse to region end,   then move down one line
+;;   Up    : multi-line  : collapse to start;
+;;           single-line : collapse to start + move up
+;;   Down  : multi-line  : collapse to end;
+;;           single-line : collapse to end   + move down
 (global-set-key (kbd "<left>")  #'nu/left-or-region-begin)
 (global-set-key (kbd "<right>") #'nu/right-or-region-end)
+(global-set-key (kbd "<up>")    #'nu/up-or-region-begin)
+(global-set-key (kbd "<down>")  #'nu/down-or-region-end)
 
 ;; C-+ => larger window
 ;; C-- => smaller window

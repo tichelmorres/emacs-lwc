@@ -77,6 +77,18 @@
   :type 'file
   :group 'zt)
 
+(defcustom zt/markdown-template
+  (expand-file-name "~/.config/emacs/local/github-markdown-template.html")
+  "Path to the pandoc HTML template for Markdown rendering."
+  :type 'file
+  :group 'zt)
+
+(defcustom zt/markdown-highlight-theme
+  (expand-file-name "~/.config/emacs/local/github-dark.theme")
+  "Path to a pandoc Skylighting JSON theme file for syntax highlighting."
+  :type 'file
+  :group 'zt)
+
 (defun zt/markdown-compile-and-open ()
   (interactive)
   (unless (buffer-file-name)
@@ -86,24 +98,19 @@
   (unless (file-readable-p zt/markdown-css)
     (user-error "Markdown CSS not found at '%s'. Place the file there or set `zt/markdown-css'."
                 zt/markdown-css))
+  (unless (file-readable-p zt/markdown-template)
+    (user-error "Markdown template not found at '%s'. Place the file there or set `zt/markdown-template'."
+                zt/markdown-template))
+  (unless (file-readable-p zt/markdown-highlight-theme)
+    (user-error "Highlight theme not found at '%s'. Place the file there or set `zt/markdown-highlight-theme'."
+                zt/markdown-highlight-theme))
   (when (buffer-modified-p)
     (save-buffer))
-  (let* ((md-file     (buffer-file-name))
-         (md-dir      (file-name-directory md-file))
-         (html-file   (zt--output-file zt/markdown-dir md-file "html"))
-         (header-file (expand-file-name
-                       (format "zt-gh-header-%s.html" (zt--short-hash md-file))
-                       zt/markdown-dir))
+  (let* ((md-file   (buffer-file-name))
+         (md-dir    (file-name-directory md-file))
+         (html-file (zt--output-file zt/markdown-dir md-file "html"))
          (default-directory md-dir))
     (zt--ensure-output-dirs)
-    (write-region
-     (concat "<style>\n"
-             "  body { max-width: 980px; margin: 0 auto;"
-             " padding: 45px; font-family: -apple-system,"
-             " BlinkMacSystemFont, 'Segoe UI', Helvetica,"
-             " Arial, sans-serif; }\n"
-             "</style>\n")
-     nil header-file)
     (let ((proc (make-process
                  :name "zt-md-compile"
                  :buffer "*zt-md-compile*"
@@ -112,23 +119,18 @@
                                 "--embed-resources"
                                 "-f" "gfm"
                                 "-t" "html"
-                                "--highlight-style=tango"
+                                "--highlight-style" zt/markdown-highlight-theme
                                 "--css" zt/markdown-css
-                                "--include-in-header" header-file
+                                "--template" zt/markdown-template
                                 md-file
                                 "-o" html-file)
                  :noquery t)))
       (message "Rendering Markdown to HTML: %s." md-file)
-      (process-put proc 'zt-header-file header-file)
       (process-put proc 'zt-html-file html-file)
       (set-process-sentinel
        proc
        (lambda (p _event)
-         (let ((header-file (process-get p 'zt-header-file))
-               (html-file   (process-get p 'zt-html-file)))
-           (ignore-errors
-             (when (and header-file (file-exists-p header-file))
-               (delete-file header-file)))
+         (let ((html-file (process-get p 'zt-html-file)))
            (cond
             ((not (= 0 (process-exit-status p)))
              (message "Pandoc failed (exit %d). See *zt-md-compile* for details."

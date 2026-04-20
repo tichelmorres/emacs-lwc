@@ -35,37 +35,8 @@
     nu/wrap-next-line      nu/wrap-previous-line
     nu/wrap-forward-char   nu/wrap-backward-char))
 
-(defconst nu/backward-arrow-commands
-  '(previous-line)
-  "Arrow commands that collapse an active selection to region-beginning.")
-
-(defconst nu/forward-arrow-commands
-  '(next-line)
-  "Arrow commands that collapse an active selection to region-end.")
-
-(defun nu/left-or-region-begin ()
-  "With an active region, jump to its beginning and deactivate it.
-Without a region, move left one character as usual."
-  (interactive)
-  (if (and (use-region-p) (not this-command-keys-shift-translated))
-      (progn
-        (goto-char (region-beginning))
-        (deactivate-mark)
-        (when (boundp 'cua--last-region-shifted)
-          (setq cua--last-region-shifted nil)))
-    (left-char)))
-
-(defun nu/right-or-region-end ()
-  "With an active region, jump to its end and deactivate it.
-Without a region, move right one character as usual."
-  (interactive)
-  (if (and (use-region-p) (not this-command-keys-shift-translated))
-      (progn
-        (goto-char (region-end))
-        (deactivate-mark)
-        (when (boundp 'cua--last-region-shifted)
-          (setq cua--last-region-shifted nil)))
-    (right-char)))
+(defconst nu/backward-arrow-commands '())
+(defconst nu/forward-arrow-commands  '())
 
 (defun nu/pre-command-deselect-on-move ()
   (when (and (use-region-p)
@@ -79,6 +50,79 @@ Without a region, move right one character as usual."
     (deactivate-mark)
     (when (boundp 'cua--last-region-shifted)
       (setq cua--last-region-shifted nil))))
+
+(defun nu/clear-region ()
+  (deactivate-mark)
+  (when (boundp 'cua--last-region-shifted)
+    (setq cua--last-region-shifted nil)))
+
+(defun nu/region-single-line-p ()
+  (= (line-number-at-pos (region-beginning))
+     (line-number-at-pos (region-end))))
+
+(defun nu/left-or-region-begin ()
+  (interactive)
+  (cond
+   (this-command-keys-shift-translated
+    (unless mark-active (push-mark nil nil t))
+    (left-char))
+   ((use-region-p)
+    (let* ((beg (region-beginning))
+           (single-line (nu/region-single-line-p)))
+      (goto-char beg)
+      (nu/clear-region)
+      (when single-line
+        (left-char))))
+   (t (left-char))))
+
+(defun nu/right-or-region-end ()
+  (interactive)
+  (cond
+   (this-command-keys-shift-translated
+    (unless mark-active (push-mark nil nil t))
+    (right-char))
+   ((use-region-p)
+    (let* ((end (region-end))
+           (single-line (nu/region-single-line-p)))
+      (goto-char end)
+      (nu/clear-region)
+      (when single-line
+        (right-char))))
+   (t (right-char))))
+
+(defun nu/up-or-region-begin ()
+  (interactive)
+  (cond
+   (this-command-keys-shift-translated
+    (unless mark-active (push-mark nil nil t))
+    (previous-line))
+   ((use-region-p)
+    (let* ((col (current-column))
+           (beg (region-beginning))
+           (single-line (nu/region-single-line-p)))
+      (nu/clear-region)
+      (if single-line
+          (progn (previous-line) (move-to-column col))
+        (goto-char beg)
+        (previous-line))))
+   (t (previous-line))))
+
+(defun nu/down-or-region-end ()
+  (interactive)
+  (cond
+   (this-command-keys-shift-translated
+    (unless mark-active (push-mark nil nil t))
+    (next-line))
+   ((use-region-p)
+    (let* ((col (current-column))
+           (end (region-end))
+           (single-line (nu/region-single-line-p)))
+      (nu/clear-region)
+      (if single-line
+          (progn (next-line) (move-to-column col))
+        (goto-char end)
+        (next-line))))
+   (t (next-line))))
 
 (defun nu/move-text--block-lines ()
   (if (use-region-p)
@@ -380,15 +424,8 @@ Without a region, move right one character as usual."
       (end-of-line)
     (backward-char)))
 
-(defvar nu/dashboard-nav-start-line nil
-  "First line of the navigable region in the dashboard file.
-Set this in the per-OS config file (e.g. nixos.el) before the
-dashboard buffer is opened.")
-
-(defvar nu/dashboard-nav-end-line nil
-  "Last line of the navigable region in the dashboard file.
-Set this in the per-OS config file (e.g. nixos.el) before the
-dashboard buffer is opened.")
+(defvar nu/dashboard-nav-start-line nil)
+(defvar nu/dashboard-nav-end-line   nil)
 
 (defvar-local nu/dashboard-nav--items nil)
 
