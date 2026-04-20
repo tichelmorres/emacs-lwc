@@ -3,20 +3,24 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        backward-sexp
+        cua-copy-region
         cua-paste
         forward-sexp
         keyboard-escape-quit
         markdown-outdent-or-delete
         nu/backward-delete-word
+        nu/down-or-region-end
         nu/indent-more-rigidly
         nu/left-or-region-begin
         nu/right-or-region-end
+        nu/up-or-region-begin
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        cua-copy-handler
         ignore
-        la/latex-compile-and-open
         nu/mc-mark-next
         nu/mc-mark-previous
         nu/mwheel-snap

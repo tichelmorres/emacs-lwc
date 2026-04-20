@@ -2,7 +2,7 @@
   "Utilities for compiling and opening LaTeX and Markdown buffers."
   :group 'tools)
 
-(defconst zt/root-dir "/tmp/zt")
+(defconst zt/root-dir (expand-file-name "zt" (temporary-file-directory)))
 (defconst zt/latex-dir (expand-file-name "LaTeX" zt/root-dir))
 (defconst zt/markdown-dir (expand-file-name "Markdown" zt/root-dir))
 
@@ -28,18 +28,40 @@
 
 (defvar zt/pdf-viewer-processes (make-hash-table :test #'equal))
 
+(defcustom zt/zathura-config-dir
+  (expand-file-name "~/.config/zathura/latex")
+  "Path to the Zathura config directory used when opening PDFs on non-Windows systems."
+  :type 'directory
+  :group 'zt)
+
+(defun zt--open-pdf (pdf-file)
+  (if (eq system-type 'windows-nt)
+      (w32-shell-execute "open" (convert-standard-filename pdf-file))
+    (let* ((zath-proc  (gethash pdf-file zt/pdf-viewer-processes))
+           (zath-alive (and zath-proc (process-live-p zath-proc))))
+      (if zath-alive
+          (message "Recompiled successfully: %s." pdf-file)
+        (puthash pdf-file
+                 (start-process "zathura" nil "zathura"
+                                "-c" zt/zathura-config-dir
+                                pdf-file)
+                 zt/pdf-viewer-processes)))))
+
 (defun zt/latex-compile-and-open ()
   (interactive)
   (unless (buffer-file-name)
     (user-error "Buffer is not visiting a file."))
   (when (buffer-modified-p)
     (save-buffer))
-  (let* ((tex-file (buffer-file-name))
-         (tex-dir  (file-name-directory tex-file))
-         (pdf-file (zt--output-file zt/latex-dir tex-file "pdf"))
-         (engine   (cond ((executable-find "lualatex") "lualatex")
-                         ((executable-find "pdflatex") "pdflatex")
-                         (t (user-error "Neither lualatex nor pdflatex found on PATH."))))
+  (let* ((tex-file  (buffer-file-name))
+         (tex-dir   (file-name-directory tex-file))
+         (jobname   (format "%s-%s"
+                            (zt--slugify (file-name-base tex-file))
+                            (zt--short-hash tex-file)))
+         (pdf-file  (expand-file-name (concat jobname ".pdf") zt/latex-dir))
+         (engine    (cond ((executable-find "lualatex") "lualatex")
+                          ((executable-find "pdflatex") "pdflatex")
+                          (t (user-error "Neither lualatex nor pdflatex found on PATH."))))
          (default-directory tex-dir)
          (proc (make-process
                 :name "zt-tex-compile"
@@ -47,29 +69,20 @@
                 :command (list engine
                                "-interaction=nonstopmode"
                                "-output-directory" zt/latex-dir
+                               "-jobname" jobname
                                tex-file)
                 :noquery t)))
+    (zt--ensure-output-dirs)
     (message "Compiling with %s: %s." engine tex-file)
     (process-put proc 'pdf-file pdf-file)
     (set-process-sentinel
      proc
      (lambda (p _event)
        (let* ((pdf-file   (process-get p 'pdf-file))
-              (pdf-exists (file-exists-p pdf-file))
-              (zath-proc   (gethash pdf-file zt/pdf-viewer-processes))
-              (zath-alive  (and zath-proc (process-live-p zath-proc))))
-         (cond
-          ((not pdf-exists)
-           (message "Compilation failed. See *zt-tex-compile* for details."))
-          (zath-alive
-           (message "Recompiled successfully: %s." pdf-file))
-          (t
-           (let ((new-proc
-                  (start-process
-                   "zathura" nil "zathura" "-c"
-                   (expand-file-name "~/.config/zathura/latex")
-                   pdf-file)))
-             (puthash pdf-file new-proc zt/pdf-viewer-processes)))))))))
+              (pdf-exists (file-exists-p pdf-file)))
+         (if pdf-exists
+             (zt--open-pdf pdf-file)
+           (message "Compilation failed. See *zt-tex-compile* for details.")))))))
 
 (defcustom zt/markdown-css
   (expand-file-name "~/.config/emacs/local/render/github-markdown.css")

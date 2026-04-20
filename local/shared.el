@@ -194,6 +194,7 @@
 
 (with-eval-after-load 'dired
   (define-key dired-mode-map (kbd "C-f")       #'isearch-forward)
+  (define-key dired-mode-map (kbd "C-S-f")     #'isearch-backward)
   (define-key dired-mode-map (kbd "C-l")       #'dired-find-file)
   (define-key dired-mode-map (kbd "M-<left>")  #'dired-up-directory)
   (define-key dired-mode-map (kbd "M-<right>") #'dired-find-file)
@@ -331,11 +332,14 @@
 (unless (display-graphic-p)
     (global-set-key (kbd "C-_") #'display-line-numbers-mode))
 
-;; Ctrl + f for search and Ctrl + s for writing
+;; Ctrl + f for foward search, Ctrl + Shift + f for backward search
+;; Ctrl + s for writing
 ;; Also remove Ctrl + b
-(global-set-key (kbd "C-f") #'isearch-forward)
+(global-set-key (kbd "C-f")   #'isearch-forward)
+(global-set-key (kbd "C-S-f") #'isearch-backward)
 (with-eval-after-load 'isearch
-  (define-key isearch-mode-map (kbd "C-f") #'isearch-repeat-forward))
+  (define-key isearch-mode-map (kbd "C-f")   #'isearch-repeat-forward)
+  (define-key isearch-mode-map (kbd "C-S-f") #'isearch-repeat-backward))
 
 (define-key isearch-mode-map (kbd "C-v") #'isearch-yank-kill)
 
