@@ -1,4 +1,4 @@
-(setq nu/dash-file (lwc/config-path "dash-windows.org"))
+(setq nu/dash-file (lwc/config-path "local" "systems" "dash" "windows.org"))
 
 (prefer-coding-system        'utf-8)
 (set-language-environment    "UTF-8")

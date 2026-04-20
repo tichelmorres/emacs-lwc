@@ -26,7 +26,7 @@
 ;; |  Dashboard
 ;; | --------------------------------------------
 
-(setq nu/dash-file (lwc/config-path "dash-nixos.org"))
+(setq nu/dash-file (lwc/config-path "local" "systems" "dash" "nixos.org"))
 (setq nu/dashboard-nav-start-line 15)
 (setq nu/dashboard-nav-end-line   19)
 (prefer-coding-system 'utf-8)
