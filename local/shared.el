@@ -366,6 +366,9 @@
   (define-key vterm-mode-map (kbd "C-S-v") #'vterm-yank)
   (define-key vterm-mode-map (kbd "C-z")   #'vterm-undo))
 
+;; Enable visual-line-mode in vterm buffers by default
+(add-hook 'vterm-mode-hook (lambda () (visual-line-mode 1)))
+
 ;; Dedent by one tab
 (global-set-key (kbd "<backtab>") #'nu/dedent-rigidly)
 

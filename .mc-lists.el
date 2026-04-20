@@ -14,7 +14,9 @@
         nu/indent-more-rigidly
         nu/left-or-region-begin
         nu/right-or-region-end
+        nu/select-line
         nu/up-or-region-begin
+        rc/duplicate-line
         ))
 
 (setq mc/cmds-to-run-once

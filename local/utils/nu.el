@@ -739,13 +739,25 @@
     (when (/= (point) saved)
       (move-beginning-of-line 1))))
 
+(defun nu/vterm-free--shift-move (move-fn)
+  "Push mark if needed, call MOVE-FN, and keep the region active."
+  (unless mark-active (push-mark nil nil t))
+  (funcall move-fn)
+  (setq deactivate-mark nil))
+
 (defvar nu/vterm-free-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "<up>")    #'previous-line)
-    (define-key map (kbd "<down>")  #'next-line)
-    (define-key map (kbd "<left>")  #'backward-char)
-    (define-key map (kbd "<right>") #'forward-char)
-    (define-key map (kbd "C-f")     #'nu/vterm-free-mode)
+    (define-key map (kbd "<up>")        #'previous-line)
+    (define-key map (kbd "<down>")      #'next-line)
+    (define-key map (kbd "<left>")      #'backward-char)
+    (define-key map (kbd "<right>")     #'forward-char)
+    (define-key map (kbd "S-<left>")    (lambda () (interactive) (nu/vterm-free--shift-move #'backward-char)))
+    (define-key map (kbd "S-<right>")   (lambda () (interactive) (nu/vterm-free--shift-move #'forward-char)))
+    (define-key map (kbd "S-<up>")      (lambda () (interactive) (nu/vterm-free--shift-move #'previous-line)))
+    (define-key map (kbd "S-<down>")    (lambda () (interactive) (nu/vterm-free--shift-move #'next-line)))
+    (define-key map (kbd "C-S-<left>")  (lambda () (interactive) (nu/vterm-free--shift-move #'backward-word)))
+    (define-key map (kbd "C-S-<right>") (lambda () (interactive) (nu/vterm-free--shift-move #'forward-word)))
+    (define-key map (kbd "C-f")         #'nu/vterm-free-mode)
     map))
 
 (define-minor-mode nu/vterm-free-mode
