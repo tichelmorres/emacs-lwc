@@ -193,12 +193,17 @@
 (add-hook 'dired-mode-hook #'nu/wrap-nav-mode)
 
 (with-eval-after-load 'dired
+  ;; isearch
   (define-key dired-mode-map (kbd "C-f")       #'isearch-forward)
   (define-key dired-mode-map (kbd "C-S-f")     #'isearch-backward)
+  ;; go to dir/file
   (define-key dired-mode-map (kbd "C-l")       #'dired-find-file)
+  ;; go to previous/next directory
   (define-key dired-mode-map (kbd "M-<left>")  #'dired-up-directory)
   (define-key dired-mode-map (kbd "M-<right>") #'dired-find-file)
+  ;; enter/quit wdired
   (define-key dired-mode-map (kbd "C-w")       #'dired-toggle-read-only)
+  ;; fast jump by 5 lines vertically with Control
   (define-key dired-mode-map (kbd "C-<down>")
     (lambda () (interactive "^")
       (forward-line 5)
@@ -207,6 +212,7 @@
     (lambda () (interactive "^")
       (forward-line -5)
       (ignore-errors (dired-move-to-filename))))
+  ;; both d and m should act as toggler markers
   (define-key dired-mode-map (kbd "d")
     (lambda () (interactive)
       (if (eq (char-after (line-beginning-position)) dired-del-marker)
@@ -216,7 +222,10 @@
     (lambda () (interactive)
       (if (eq (char-after (line-beginning-position)) dired-marker-char)
           (dired-unmark 1)
-        (dired-mark 1)))))
+        (dired-mark 1))))
+  ;; C-x C-j goes back to the previous buffer
+  ;; (mirroring how C-j works in vterm)
+  (define-key dired-mode-map (kbd "C-x C-j") #'previous-buffer))
 
 ;; C-w inside wdired saves changes and returns to plain dired
 (with-eval-after-load 'wdired
