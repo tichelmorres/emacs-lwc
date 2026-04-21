@@ -22,8 +22,8 @@
 (add-to-list 'load-path (lwc/config-path "local"))
 (load-file (lwc/config-path "local" "utils" "rc.el"))
 (load-file (lwc/config-path "local" "utils" "nu.el"))
-(load-file (lwc/config-path "local" "render" "zt.el"))
-(load-file (lwc/config-path "local" "tools" "pb.el"))
+(load-file (lwc/config-path "local" "tools" "render.el"))
+(load-file (lwc/config-path "local" "tools" "probe.el"))
 (load-file (lwc/config-path "local" "modes" "simpc-mode.el"))
 (add-to-list 'custom-theme-load-path (lwc/config-path "local" "themes"))
 

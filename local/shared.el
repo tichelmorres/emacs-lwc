@@ -393,7 +393,7 @@
 
 ;; Open LaTeX    as PDF  (via Zathura)
 ;; Open Markdown as HTML (via web browser)
-(global-set-key (kbd "C-c p p") #'zt/compile-and-open)
+(global-set-key (kbd "C-c p p") #'ren/compile-and-open)
 
 ;; Open GAMES buffer
 (global-set-key (kbd "C-c g") #'nu/open-games-buffer)
