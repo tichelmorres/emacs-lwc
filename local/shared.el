@@ -38,7 +38,10 @@
 (horizontal-scroll-bar-mode -1)
 
 ;; Stop the cursor from blinking
-(blink-cursor-mode 0)
+(blink-cursor-mode -1)
+
+(unless (display-graphic-p)
+  (setq visible-cursor nil))
 
 ;; Disable top/bottom padding while scrolling
 (setq scroll-margin 0)

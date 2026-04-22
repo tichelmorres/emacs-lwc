@@ -13,7 +13,7 @@
 —————————————————————————————————
 
 [[file:~/TeX/][TeX]]
-[[elisp:(find-file-other-frame "~/Projects/ADS/incc")][Incc]]
+[[file:~/Projects/][Projects]]
 [[file:~/Projects/probe/grass][grass]]
 [[file:~/.config/emacs/init.el][init.el]]
 [[file:~/Manuscripts/Debalde/dorm.md][dorm.md]]
