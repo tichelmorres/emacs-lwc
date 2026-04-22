@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         backward-sexp
+        cua-cancel
         cua-copy-region
         cua-paste
         forward-sexp
