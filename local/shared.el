@@ -58,6 +58,13 @@
 (defadvice split-window (after split-window-after activate)
   (other-window 1))
 
+;; Switch to help buffer automatically
+(setq help-window-select t)
+
+;; Kill running compilation process before starting a new one
+;; (without asking for confirmation)
+(setq compilation-always-kill t)
+
 ;; Disable annoying bell sound
 (setq ring-bell-function 'ignore)
 
