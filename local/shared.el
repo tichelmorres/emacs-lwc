@@ -54,6 +54,10 @@
 (setq split-height-threshold nil
       split-width-threshold  0)
 
+;; Cursor should automatically follow splits
+(defadvice split-window (after split-window-after activate)
+  (other-window 1))
+
 ;; Disable annoying bell sound
 (setq ring-bell-function 'ignore)
 
