@@ -327,7 +327,11 @@
 (with-eval-after-load 'org
   (define-key org-mode-map (kbd "M-<left>")  #'dired-jump)
   (define-key org-mode-map (kbd "M-<right>") nil)
-  (define-key org-mode-map (kbd "C-j")       #'vterm))
+  (cond
+   ((eq system-type 'windows-nt)
+    (define-key org-mode-map (kbd "C-j")     #'shell))
+   (t
+    (define-key org-mode-map (kbd "C-j")     #'vterm))))
 (global-unset-key (kbd "M-<right>"))
 
 ;; Make ESC act like a universal quit
@@ -366,8 +370,16 @@
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 (global-set-key (kbd "C-l") #'nu/goto-link-source)
 
-;; C-j => open vterm (fish shell)
-(global-set-key (kbd "C-j") #'vterm)
+;; C-j => open shell
+(cond
+ ((eq system-type 'windows-nt)
+  (global-set-key (kbd "C-j") #'shell))
+ (t
+  (global-set-key (kbd "C-j") #'vterm)))
+
+;; C-j switches to the previous buffer
+(with-eval-after-load 'shell
+  (define-key shell-mode-map (kbd "C-j")   #'previous-buffer))
 
 ;; C-f toggles free-cursor mode; C-f again exits
 ;; C-j switches to the previous buffer
