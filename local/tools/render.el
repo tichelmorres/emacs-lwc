@@ -81,19 +81,19 @@
            (message "ren: Compilation failed. See *ren-tex-compile* for details.")))))))
 
 (defcustom ren/markdown-css
-  (expand-file-name "~/.config/emacs/local/tools/render/github-markdown.css")
+  (lwc/config-path "local" "tools" "render" "github-markdown.css")
   "Path to the Markdown CSS file."
   :type 'file
   :group 'ren)
 
 (defcustom ren/markdown-template
-  (expand-file-name "~/.config/emacs/local/tools/render/github-markdown-template.html")
+  (lwc/config-path "local" "tools" "render" "github-markdown-template.html")
   "Path to the pandoc HTML template for Markdown rendering."
   :type 'file
   :group 'ren)
 
 (defcustom ren/markdown-highlight-theme
-  (expand-file-name "~/.config/emacs/local/tools/render/github-dark.theme")
+  (lwc/config-path "local" "tools" "render" "github-dark.theme")
   "Path to a pandoc Skylighting JSON theme file for syntax highlighting."
   :type 'file
   :group 'ren)
@@ -153,6 +153,9 @@
 (defun ren/compile-and-open ()
   (interactive)
   (cond
-   ((derived-mode-p 'latex-mode)    (ren/latex-compile-and-open))
+   ((derived-mode-p 'latex-mode)
+    (cond
+     ((eq system-type 'windows-nt) (message "ren: latex rendering is not available for Windows."))
+     (t (ren/latex-compile-and-open))))
    ((derived-mode-p 'markdown-mode) (ren/markdown-compile-and-open))
    (t (user-error "ren: %s is unsupported." major-mode))))
