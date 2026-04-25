@@ -313,6 +313,13 @@
 (global-set-key (kbd "<up>")    #'nu/up-or-region-begin)
 (global-set-key (kbd "<down>")  #'nu/down-or-region-end)
 
+;; C-S-<arrow>: extend selection by word (left/right) or paragraph (up/down).
+;; This prevents C-S-<arrow> from collapsing the region.
+(global-set-key (kbd "C-S-<left>")  #'nu/shift-select-backward-word)
+(global-set-key (kbd "C-S-<right>") #'nu/shift-select-forward-word)
+(global-set-key (kbd "C-S-<up>")    #'nu/shift-select-backward-paragraph)
+(global-set-key (kbd "C-S-<down>")  #'nu/shift-select-forward-paragraph)
+
 ;; C-+ => larger window
 ;; C-- => smaller window
 (global-set-key (kbd "C-+")  #'nu/text-scale-increase)

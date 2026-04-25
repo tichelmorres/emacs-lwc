@@ -56,6 +56,44 @@
   (when (boundp 'cua--last-region-shifted)
     (setq cua--last-region-shifted nil)))
 
+(defun nu/called-with-control-p ()
+  (let* ((keys (this-command-keys-vector))
+         (key  (and (> (length keys) 0)
+                    (aref keys (1- (length keys))))))
+    (and key (memq 'control (event-modifiers key)))))
+
+(defun nu/shift-select-backward-word ()
+  (interactive)
+  (unless mark-active (push-mark nil nil t))
+  (backward-word)
+  (when (boundp 'cua--last-region-shifted)
+    (setq cua--last-region-shifted nil))
+  (setq deactivate-mark nil))
+
+(defun nu/shift-select-forward-word ()
+  (interactive)
+  (unless mark-active (push-mark nil nil t))
+  (forward-word)
+  (when (boundp 'cua--last-region-shifted)
+    (setq cua--last-region-shifted nil))
+  (setq deactivate-mark nil))
+
+(defun nu/shift-select-backward-paragraph ()
+  (interactive)
+  (unless mark-active (push-mark nil nil t))
+  (backward-paragraph)
+  (when (boundp 'cua--last-region-shifted)
+    (setq cua--last-region-shifted nil))
+  (setq deactivate-mark nil))
+
+(defun nu/shift-select-forward-paragraph ()
+  (interactive)
+  (unless mark-active (push-mark nil nil t))
+  (forward-paragraph)
+  (when (boundp 'cua--last-region-shifted)
+    (setq cua--last-region-shifted nil))
+  (setq deactivate-mark nil))
+
 (defun nu/region-single-line-p ()
   (= (line-number-at-pos (region-beginning))
      (line-number-at-pos (region-end))))
@@ -63,6 +101,8 @@
 (defun nu/left-or-region-begin ()
   (interactive)
   (cond
+   ((nu/called-with-control-p)
+    (nu/shift-select-backward-word))
    (this-command-keys-shift-translated
     (unless mark-active (push-mark nil nil t))
     (left-char))
@@ -78,6 +118,8 @@
 (defun nu/right-or-region-end ()
   (interactive)
   (cond
+   ((nu/called-with-control-p)
+    (nu/shift-select-forward-word))
    (this-command-keys-shift-translated
     (unless mark-active (push-mark nil nil t))
     (right-char))
@@ -93,6 +135,8 @@
 (defun nu/up-or-region-begin ()
   (interactive)
   (cond
+   ((nu/called-with-control-p)
+    (nu/shift-select-backward-paragraph))
    (this-command-keys-shift-translated
     (unless mark-active (push-mark nil nil t))
     (previous-line))
@@ -110,6 +154,8 @@
 (defun nu/down-or-region-end ()
   (interactive)
   (cond
+   ((nu/called-with-control-p)
+    (nu/shift-select-forward-paragraph))
    (this-command-keys-shift-translated
     (unless mark-active (push-mark nil nil t))
     (next-line))
