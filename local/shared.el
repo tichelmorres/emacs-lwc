@@ -542,12 +542,6 @@
 ;; |  Others
 ;; | --------------------------------------------
 
-;; Translation
-(rc/require 'google-translate)
-(require 'google-translate)
-(require 'google-translate-smooth-ui)
-(global-set-key (kbd "C-c t") 'google-translate-smooth-translate)
-
 ;; ERC
 (setq erc-inhibit-multiline-input t)
 (setq erc-send-whitespace-lines t)
