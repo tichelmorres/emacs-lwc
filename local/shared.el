@@ -355,6 +355,9 @@
 ;; Make ESC act like a universal quit
 (global-set-key [escape]  #'keyboard-escape-quit)
 
+;; C-q => kill the current buffer (no prompt)
+(global-set-key (kbd "C-q") #'kill-current-buffer)
+
 ;; C-p => select current line, cursor at end of line
 (global-set-key (kbd "C-p") #'nu/select-line)
 
