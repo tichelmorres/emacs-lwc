@@ -356,7 +356,7 @@
 (global-set-key [escape]  #'keyboard-escape-quit)
 
 ;; C-q => kill the current buffer (no prompt)
-(global-set-key (kbd "C-q") #'kill-current-buffer)
+(global-set-key (kbd "C-q") #'kill-buffer-and-window)
 
 ;; C-p => select current line, cursor at end of line
 (global-set-key (kbd "C-p") #'nu/select-line)
