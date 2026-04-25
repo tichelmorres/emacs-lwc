@@ -240,6 +240,9 @@
   (require 'subr-x)
   (condition-case err
       (cond
+       ((get-text-property (point) 'action)
+        (push-button))
+
        ((string= (buffer-name) "*games*")
         (let* ((line  (string-trim (thing-at-point 'line t)))
                (game  (intern-soft line)))
@@ -740,7 +743,6 @@
       (move-beginning-of-line 1))))
 
 (defun nu/vterm-free--shift-move (move-fn)
-  "Push mark if needed, call MOVE-FN, and keep the region active."
   (unless mark-active (push-mark nil nil t))
   (funcall move-fn)
   (setq deactivate-mark nil))
@@ -755,6 +757,10 @@
     (define-key map (kbd "S-<right>")   (lambda () (interactive) (nu/vterm-free--shift-move #'forward-char)))
     (define-key map (kbd "S-<up>")      (lambda () (interactive) (nu/vterm-free--shift-move #'previous-line)))
     (define-key map (kbd "S-<down>")    (lambda () (interactive) (nu/vterm-free--shift-move #'next-line)))
+    (define-key map (kbd "C-<left>")    #'backward-word)
+    (define-key map (kbd "C-<right>")   #'forward-word)
+    (define-key map (kbd "C-<up>")      #'backward-paragraph)
+    (define-key map (kbd "C-<down>")    #'forward-paragraph)
     (define-key map (kbd "C-S-<left>")  (lambda () (interactive) (nu/vterm-free--shift-move #'backward-word)))
     (define-key map (kbd "C-S-<right>") (lambda () (interactive) (nu/vterm-free--shift-move #'forward-word)))
     (define-key map (kbd "C-f")         #'nu/vterm-free-mode)
