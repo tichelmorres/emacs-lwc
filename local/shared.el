@@ -366,6 +366,9 @@
 (global-set-key (kbd "C-M-<right>") (lambda () (interactive) (nu/resize-window t   nil)))
 (global-set-key (kbd "C-M-<left>")  (lambda () (interactive) (nu/resize-window t   t)))
 
+;; M-TAB cycles between windows
+(global-set-key (kbd "M-<tab>") 'other-window)
+
 ;; Unset now unuseful binds
 (global-unset-key (kbd "C-x C-+"))
 (global-unset-key (kbd "C-x C-="))
