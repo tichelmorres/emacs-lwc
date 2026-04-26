@@ -2,6 +2,8 @@
   "Utilities gotten from external Elisp config files."
   :group 'tools)
 
+(defvar rc/font-family nil)
+
 (defvar rc/package-contents-refreshed nil)
 
 (defun rc/package-refresh-contents-once ()

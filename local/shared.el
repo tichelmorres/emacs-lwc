@@ -2,6 +2,13 @@
 ;; |  General
 ;; | --------------------------------------------
 
+;; Pin fixed-pitch faces to the same family as the default font,
+;; so modes that inherit from fixed-pitch (e.g. markdown code blocks)
+;; never switch typeface
+(when (stringp rc/font-family)
+  (set-face-attribute 'fixed-pitch       nil :family rc/font-family)
+  (set-face-attribute 'fixed-pitch-serif nil :family rc/font-family))
+
 ;; Disable warnings at initialization
 (setq warning-minimum-level :emergency)
 
@@ -85,20 +92,28 @@
             )
           t)
 
-;; Disable line numbers and truncate big lines on MD and remap
+;; Disable line numbers, truncate big lines and remap
 ;; every markdown face that may inherit a different font to the
 ;; default face's family, so all markdown content uses the same
-;; font face
+;; font face.
 (add-hook 'markdown-mode-hook
           (lambda ()
             (display-line-numbers-mode 0)
             (visual-line-mode t)
-            (let ((family (face-attribute 'default :family)))
+            (let* ((default-font (face-attribute 'default :font))
+                   (family (when (fontp default-font)
+                             (font-get default-font :family))))
               (when (stringp family)
-                (dolist (face '(markdown-pre-face
+                (dolist (face '(fixed-pitch
+                                fixed-pitch-serif
+                                markdown-pre-face
                                 markdown-code-face
                                 markdown-inline-code-face
-                                markdown-table-face))
+                                markdown-table-face
+                                markdown-markup-face
+                                markdown-math-face
+                                markdown-language-keyword-face
+                                markdown-language-info-face))
                   (when (facep face)
                     (face-remap-add-relative face :family family))))))
           t)
@@ -207,6 +222,9 @@
 (add-hook 'dired-mode-hook #'nu/wrap-nav-mode)
 
 (with-eval-after-load 'dired
+  ;; unused
+  (define-key dired-mode-map (kbd "f")         nil)
+  (define-key dired-mode-map (kbd "p")         nil)
   ;; isearch
   (define-key dired-mode-map (kbd "C-f")       #'isearch-forward)
   (define-key dired-mode-map (kbd "C-S-f")     #'isearch-backward)
@@ -354,6 +372,9 @@
 
 ;; Make ESC act like a universal quit
 (global-set-key [escape]  #'keyboard-escape-quit)
+
+;; C-x C-b => same as C-x b
+(global-set-key (kbd "C-x C-b") #'switch-to-buffer)
 
 ;; C-q => kill the current buffer (no prompt)
 (global-set-key (kbd "C-q") #'kill-buffer-and-window)
@@ -532,7 +553,7 @@
 (add-hook 'c++-mode-hook 'rc/set-up-whitespace-handling)
 (add-hook 'c-mode-hook 'rc/set-up-whitespace-handling)
 (add-hook 'simpc-mode-hook 'rc/set-up-whitespace-handling)
-(add-hook 'emacs-lisp-mode 'rc/set-up-whitespace-handling)
+(add-hook 'emacs-lisp-mode-hook 'rc/set-up-whitespace-handling)
 (add-hook 'rust-mode-hook 'rc/set-up-whitespace-handling)
 (add-hook 'markdown-mode-hook 'rc/set-up-whitespace-handling)
 (add-hook 'python-mode-hook 'rc/set-up-whitespace-handling)

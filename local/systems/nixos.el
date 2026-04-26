@@ -31,6 +31,7 @@
 (setq nu/dashboard-nav-end-line   19)
 (prefer-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
+(setq rc/font-family "Iosevka Nerd Font Mono")
 (add-to-list 'default-frame-alist '(font . "Iosevka Nerd Font Mono-20"))
 (set-face-attribute 'default nil :weight 'normal)
 ;; (set-face-attribute 'font-lock-comment-face nil :weight 'bold)

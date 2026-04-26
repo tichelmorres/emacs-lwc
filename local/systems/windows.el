@@ -7,6 +7,7 @@
 (set-keyboard-coding-system  'utf-8)
 (set-selection-coding-system 'utf-16le-dos)
 
+(setq rc/font-family "Consolas")
 (add-to-list 'default-frame-alist '(font . "Consolas-15"))
 
 (add-hook 'emacs-startup-hook
