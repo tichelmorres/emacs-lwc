@@ -473,6 +473,15 @@
       (end-of-line)
     (backward-char)))
 
+(defun nu/org-animate-gifs-in-dash ()
+  (when (and buffer-file-name
+             (string-equal (file-truename buffer-file-name)
+                           (file-truename nu/dash-file)))
+    (org-display-inline-images)
+    (org-inline-anim-mode 1)
+    (when (fboundp 'org-inline-anim-animate-all)
+      (org-inline-anim-animate-all))))
+
 (defvar nu/dashboard-nav-start-line nil)
 (defvar nu/dashboard-nav-end-line   nil)
 

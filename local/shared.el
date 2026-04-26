@@ -78,6 +78,17 @@
 ;; Disable automatic indentation
 (electric-indent-mode -1)
 
+;; Short answers
+(setopt use-short-answers t)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Clear the echo area immediately after answering a y/n prompt
+;; instead of leaving it visible until the next keypress
+(advice-add 'y-or-n-p :around
+            (lambda (orig-fn &rest args)
+              (prog1 (apply orig-fn args)
+                (message nil))))
+
 ;; Use the uniform line height "latex-mode",
 ;; insert a literal " instead of smart quotes (`` / ''),
 ;; enable truncate mode automatically for LaTeX mode
@@ -118,12 +129,23 @@
                     (face-remap-add-relative face :family family))))))
           t)
 
-;; Wayland wl-copy support for emacs -nw
+;; Wayland clipboard support for emacs -nw
+;; xclip-mode is bypassed here because it pipes text to wl-copy without
+;; setting a coding system on the process, which silently drops non-ASCII
+;; bytes
 (unless (eq system-type 'windows-nt)
-  (rc/require 'xclip)
-  (setq xclip-program "wl-copy")
-  (setq xclip-method 'wl-copy)
-  (xclip-mode 1))
+  (setq interprogram-cut-function
+        (lambda (text)
+          (let ((process-connection-type nil))
+            (let ((proc (start-process "wl-copy" nil "wl-copy")))
+              (set-process-coding-system proc 'utf-8-unix 'utf-8-unix)
+              (process-send-string proc text)
+              (process-send-eof proc)))))
+  (setq interprogram-paste-function
+        (lambda ()
+          (let ((coding-system-for-read 'utf-8))
+            (ignore-errors
+              (shell-command-to-string "wl-paste --no-newline"))))))
 
 ;; Auto-completion
 (rc/require 'smex 'ido-completing-read+)
@@ -148,18 +170,7 @@
 ;; Org files config
 (rc/require 'org-inline-anim)
 (setq org-inline-anim-loop t)
-
 (setq org-startup-with-inline-images t)
-
-(defun nu/org-animate-gifs-in-dash ()
-  (when (and buffer-file-name
-	     (string-equal (file-truename buffer-file-name)
-			   (file-truename nu/dash-file)))
-    (org-display-inline-images)
-    (org-inline-anim-mode 1)
-    (when (fboundp 'org-inline-anim-animate-all)
-      (org-inline-anim-animate-all))))
-
 (add-hook 'org-mode-hook #'nu/org-animate-gifs-in-dash)
 
 (setq org-startup-indented t)
@@ -237,24 +248,24 @@
   (define-key dired-mode-map (kbd "C-w")       #'dired-toggle-read-only)
   ;; fast jump by 5 lines vertically with Control
   (define-key dired-mode-map (kbd "C-<down>")
-    (lambda () (interactive "^")
-      (forward-line 5)
-      (ignore-errors (dired-move-to-filename))))
+              (lambda () (interactive "^")
+                (forward-line 5)
+                (ignore-errors (dired-move-to-filename))))
   (define-key dired-mode-map (kbd "C-<up>")
-    (lambda () (interactive "^")
-      (forward-line -5)
-      (ignore-errors (dired-move-to-filename))))
+              (lambda () (interactive "^")
+                (forward-line -5)
+                (ignore-errors (dired-move-to-filename))))
   ;; both d and m should act as toggler markers
   (define-key dired-mode-map (kbd "d")
-    (lambda () (interactive)
-      (if (eq (char-after (line-beginning-position)) dired-del-marker)
-          (dired-unmark 1)
-        (dired-flag-file-deletion 1))))
+              (lambda () (interactive)
+                (if (eq (char-after (line-beginning-position)) dired-del-marker)
+                    (dired-unmark 1)
+                  (dired-flag-file-deletion 1))))
   (define-key dired-mode-map (kbd "m")
-    (lambda () (interactive)
-      (if (eq (char-after (line-beginning-position)) dired-marker-char)
-          (dired-unmark 1)
-        (dired-mark 1))))
+              (lambda () (interactive)
+                (if (eq (char-after (line-beginning-position)) dired-marker-char)
+                    (dired-unmark 1)
+                  (dired-mark 1))))
   ;; C-x C-j goes back to the previous buffer
   ;; (mirroring how C-j works in vterm)
   (define-key dired-mode-map (kbd "C-x C-j") #'previous-buffer))
@@ -377,7 +388,7 @@
 (global-set-key (kbd "C-x C-b") #'switch-to-buffer)
 
 ;; C-q => kill the current buffer (no prompt)
-(global-set-key (kbd "C-q") #'kill-buffer-and-window)
+(global-set-key (kbd "C-q") #'rc/kill-buffer-and-window)
 
 ;; C-p => select current line, cursor at end of line
 (global-set-key (kbd "C-p") #'nu/select-line)
@@ -388,7 +399,7 @@
 ;; -nw mode causes C-/ to be sent as C-_
 ;; so we overwrite the C-_ bind
 (unless (display-graphic-p)
-    (global-set-key (kbd "C-_") #'display-line-numbers-mode))
+  (global-set-key (kbd "C-_") #'display-line-numbers-mode))
 
 ;; Ctrl + f for foward search, Ctrl + Shift + f for backward search
 ;; Ctrl + s for writing
@@ -430,7 +441,8 @@
   (define-key vterm-mode-map (kbd "C-j")   #'previous-buffer)
   (define-key vterm-mode-map (kbd "C-v")   #'vterm-yank)
   (define-key vterm-mode-map (kbd "C-S-v") #'vterm-yank)
-  (define-key vterm-mode-map (kbd "C-z")   #'vterm-undo))
+  (define-key vterm-mode-map (kbd "C-z")   #'vterm-undo)
+  (define-key vterm-mode-map (kbd "C-q")   #'rc/kill-buffer-and-window))
 
 ;; Enable visual-line-mode in vterm buffers by default
 (add-hook 'vterm-mode-hook (lambda () (visual-line-mode 1)))
@@ -463,7 +475,7 @@
 
 ;; -nw mode causes C-<backspace> to be sent as C-h
 (unless (display-graphic-p)
-    (global-set-key (kbd "C-h") #'nu/backward-delete-word))
+  (global-set-key (kbd "C-h") #'nu/backward-delete-word))
 
 ;; Multiple cursors
 (rc/require 'multiple-cursors)

@@ -59,3 +59,9 @@
   (interactive)
   (whitespace-mode 1)
   (add-to-list 'write-file-functions 'delete-trailing-whitespace))
+
+(defun rc/kill-buffer-and-window ()
+  (interactive)
+  (kill-buffer)
+  (unless (one-window-p)
+    (delete-window)))
