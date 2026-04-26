@@ -827,3 +827,14 @@
   (message (if nu/vterm-free-mode
                "vterm: free mode ON"
                "vterm: free mode OFF")))
+
+(defcustom nu/window-resize-step 3
+  "Lines or columns to add/remove per window resize keystroke."
+  :type 'integer
+  :group 'nu)
+
+(defun nu/resize-window (horizontal enlarge)
+  (let ((delta (* nu/window-resize-step (if enlarge 1 -1))))
+    (if horizontal
+        (enlarge-window-horizontally delta)
+      (enlarge-window delta))))

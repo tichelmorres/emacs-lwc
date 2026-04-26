@@ -82,7 +82,7 @@
 (setopt use-short-answers t)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Clear the echo area immediately after answering a y/n prompt
+;; Clear the echo area immediately after answering a y/n prompt,
 ;; instead of leaving it visible until the next keypress
 (advice-add 'y-or-n-p :around
             (lambda (orig-fn &rest args)
@@ -132,7 +132,9 @@
 ;; Wayland clipboard support for emacs -nw
 ;; xclip-mode is bypassed here because it pipes text to wl-copy without
 ;; setting a coding system on the process, which silently drops non-ASCII
-;; bytes
+;; bytes (accented letters, box-drawing characters, etc.).
+;; Instead we wire interprogram-cut/paste-function directly so we can
+;; call set-process-coding-system before sending any data.
 (unless (eq system-type 'windows-nt)
   (setq interprogram-cut-function
         (lambda (text)
@@ -355,6 +357,14 @@
 (global-set-key (kbd "C-=")  #'nu/text-scale-increase)
 (global-set-key (kbd "C--")  #'nu/text-scale-decrease)
 (global-set-key (kbd "C-_")  #'nu/text-scale-decrease)
+
+;; C-M-<arrow> => resize the selected split window
+;;   Up    : taller          Down   : shorter
+;;   Left  : wider           Right  : narrower
+(global-set-key (kbd "C-M-<up>")    (lambda () (interactive) (nu/resize-window nil t)))
+(global-set-key (kbd "C-M-<down>")  (lambda () (interactive) (nu/resize-window nil nil)))
+(global-set-key (kbd "C-M-<right>") (lambda () (interactive) (nu/resize-window t   nil)))
+(global-set-key (kbd "C-M-<left>")  (lambda () (interactive) (nu/resize-window t   t)))
 
 ;; Unset now unuseful binds
 (global-unset-key (kbd "C-x C-+"))
